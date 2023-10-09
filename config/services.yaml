@@ -35,3 +35,4 @@ services:
       - '../src/Helper/'
       - '../src/Loader/'
       - '../src/Traits/'
+      - '../src/Routing/'
