@@ -16,40 +16,14 @@ class FrontAction {
 	public static $domain_name = 'default';
 
 	/**
-	 * Redirect to admin
-	 */
-	public function redirect()
-	{
-		if( defined('DOING_CRON') && DOING_CRON )
-			return;
-
-		$path = rtrim($_SERVER['REQUEST_URI'], '/');
-
-		/* /cms/ -> /cms/wp-admin */
-		if( !empty($path) && strpos($path, WP_FOLDER) !== false && 'POST' !== $_SERVER['REQUEST_METHOD'] ){
-			wp_redirect(is_user_logged_in() ? admin_url('index.php') : wp_login_url());
-			exit;
-		}
-
-		/* /wp-admin/ -> /cms/wp-admin */
-        if (!empty($path) && str_starts_with($path, '/wp-admin')) {
-			wp_redirect(is_user_logged_in() ? admin_url('index.php') : wp_login_url());
-            exit();
-        }
-	}
-
-
-	/**
 	 * Init placeholder
 	 */
 	public function init(){}
-
 
 	/**
 	 * Loaded placeholder
 	 */
 	public function loaded(){}
-
 
 	public function __construct()
 	{
@@ -58,7 +32,6 @@ class FrontAction {
 
         add_action( 'kernel_loaded', [$this, 'loaded']);
         add_action( 'init', [$this, 'init']);
-		add_action( 'init', [$this, 'redirect']);
 		add_action( 'init', '_wp_admin_bar_init', 0 );
 	}
 }
