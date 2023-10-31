@@ -25,11 +25,17 @@ class FrontAction {
 
 		$path = rtrim($_SERVER['REQUEST_URI'], '/');
 
+		/* /cms/ -> /cms/wp-admin */
 		if( !empty($path) && strpos($path, WP_FOLDER) !== false && 'POST' !== $_SERVER['REQUEST_METHOD'] ){
-
 			wp_redirect(is_user_logged_in() ? admin_url('index.php') : wp_login_url());
 			exit;
 		}
+
+		/* /wp-admin/ -> /cms/wp-admin */
+        if (!empty($path) && str_starts_with($path, '/wp-admin')) {
+			wp_redirect(is_user_logged_in() ? admin_url('index.php') : wp_login_url());
+            exit();
+        }
 	}
 
 
