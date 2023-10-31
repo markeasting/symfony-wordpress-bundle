@@ -2,21 +2,20 @@
 
 namespace Metabolism\WordpressBundle;
 
-use App\Kernel;
 use Env\Env;
-use Metabolism\WordpressBundle\Action\WordpressAction;
 use Metabolism\WordpressBundle\Helper\PathHelper;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Symfony\Component\Routing\RouterInterface;
 use function Env\env;
 
 class WordpressBundle extends Bundle
 {
-    private $root_dir;
-    private $public_dir;
-    private $log_dir;
-    private $router;
+    private string $root_dir;
+    private string $public_dir;
+    private string $log_dir;
+    private RouterInterface $router;
 
     public static $instance = null;
 
@@ -48,9 +47,7 @@ class WordpressBundle extends Bundle
 
     public function build(ContainerBuilder $container)
     {
-        // $container->register('metabolism.action.wordpress_action', WordpressAction::class);
-
-        $container->addCompilerPass(new class() implements CompilerPassInterface {
+        $container->addCompilerPass(new class () implements CompilerPassInterface {
             public function process(ContainerBuilder $container): void
             {
                 if (class_exists('\App\Action\WordpressAction')) {
@@ -113,7 +110,6 @@ class WordpressBundle extends Bundle
 
     public static function isLoginUrl()
     {
-
         $uri = explode('/', $_SERVER['SCRIPT_NAME']);
         $page = end($uri);
 
@@ -125,11 +121,6 @@ class WordpressBundle extends Bundle
      */
     public static function boostrap()
     {
-        if (is_admin() && class_exists('\App\Kernel')) {
-            $kernel = new \App\Kernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
-            $kernel->boot(); // Set up minimal DI container in admin interface
-        }
-
         self::loadPlugins();
 
         // dd($kernel->getContainer()->get('WordpressBundle'));
@@ -172,34 +163,6 @@ class WordpressBundle extends Bundle
         }
 
         $wordpressAction = $this->container->get('metabolism.action.wordpress_action');
-
-        // @TODO handle this using DI, see $this->build()
-        // if (self::isLoginUrl()) {
-        //     if (class_exists('\App\Action\LoginAction'))
-        //         new \App\Action\LoginAction();
-        //     else
-        //         new Metabolism\WordpressBundle\Action\LoginAction();
-
-        //     return;
-        // }
-
-        // if (is_admin()) {
-        //     if (class_exists('\App\Action\AdminAction'))
-        //         new \App\Action\AdminAction();
-        //     else
-        //         new Metabolism\WordpressBundle\Action\AdminAction();
-        // } else {
-        //     if (class_exists('\App\Action\FrontAction'))
-        //         new \App\Action\FrontAction();
-        //     else
-        //         new Metabolism\WordpressBundle\Action\FrontAction();
-        // }
-
-        // if (class_exists('\App\Action\WordpressAction'))
-        //     new \App\Action\WordpressAction();
-        // else
-        //     new Metabolism\WordpressBundle\Action\WordpressAction();
-
     }
 
     /**
@@ -207,16 +170,21 @@ class WordpressBundle extends Bundle
      */
     private function loadWordpress()
     {
+        /* Wordpress is already loaded, exit */
+        if (defined('ABSPATH'))
+            return;
+
+        /* wp-config is missing, exit */
         if (!file_exists($this->public_dir . '/wp-config.php'))
             return;
 
         if (!defined('WP_DEBUG_LOG'))
             define('WP_DEBUG_LOG', realpath($this->log_dir . '/wp-errors.log'));
 
-        // get WordPress path
+        /* Get WordPress path */
         $wp_path = PathHelper::getWordpressRoot($this->root_dir);
 
-        // start loading WordPress core without theme support
+        /* Start loading WordPress core without theme support */
         $wp_load_script = $this->root_dir . '/' . $wp_path . 'wp-load.php';
 
         if (!file_exists($wp_load_script))
