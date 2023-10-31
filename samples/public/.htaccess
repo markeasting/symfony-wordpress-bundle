@@ -85,7 +85,7 @@ Options -Indexes
 
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^[_0-9a-zA-Z-]+/(edition|wp-bundle|uploads|theme)(.*) $1$2 [QSA,L]
+    RewriteRule ^[_0-9a-zA-Z-]+/(cms|wp-bundle|uploads|theme)(.*) $1$2 [QSA,L]
 
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
