@@ -397,7 +397,6 @@ class Image extends Entity
     }
 
     /**
-     * @deprecated
      * @return string|null
      */
     public function getUrl(){
@@ -893,8 +892,7 @@ class Image extends Entity
     }
 
     /**
-     * @deprecated
-     * Use picture
+     * @deprecated use picture()
      */
     public function toHTML($w, $h=0, $sources=false, $alt=false, $loading='lazy'){
 

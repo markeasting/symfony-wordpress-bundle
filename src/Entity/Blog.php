@@ -483,16 +483,6 @@ class Blog extends Entity
     }
 
     /**
-     * @deprecated
-     *
-     * @return string
-     */
-    public function getWpTitle(){
-
-        return $this->getTitle();
-    }
-
-    /**
      * @return string
      */
     public function getTitle(): string
@@ -521,19 +511,13 @@ class Blog extends Entity
     }
 
     /**
-     * @deprecated
-     */
-    public function getHomeUrl($path = '', $scheme = null): string
-    {
-        return $this->getHomeLink($path, $scheme);
-    }
-
-    /**
+     * Undocumented function
+     *
      * @param string $path
-     * @param null $scheme
+     * @param [type] $scheme
      * @return string
      */
-    public function getHomeLink($path = '', $scheme = null): string
+    public function getHomeUrl($path = '', $scheme = null): string
     {
         if( !empty($path) )
             return home_url($path, $scheme);
@@ -542,21 +526,30 @@ class Blog extends Entity
             $this->home_url = home_url('/');
 
         return $this->home_url;
+        // return $this->getHomeLink($path, $scheme);
     }
 
-    /**
-     * @deprecated
-     */
-    public function getSearchUrl($query=''): string
-    {
-        return $this->getSearchLink($query);
-    }
+    // /**
+    //  * @param string $path
+    //  * @param null $scheme
+    //  * @return string
+    //  */
+    // public function getHomeLink($path = '', $scheme = null): string
+    // {
+    //     if( !empty($path) )
+    //         return home_url($path, $scheme);
+
+    //     if( is_null($this->home_url) )
+    //         $this->home_url = home_url('/');
+
+    //     return $this->home_url;
+    // }
 
     /**
      * @param string $query
      * @return string
      */
-    public function getSearchLink($query=''): string
+    public function getSearchUrl($query=''): string
     {
         if( !empty($query) )
             return get_search_link($query);
@@ -576,23 +569,26 @@ class Blog extends Entity
     }
 
     /**
-     * @deprecated
      */
     public function getPrivacyPolicyUrl(): string
-    {
-        return $this->getPrivacyPolicyLink();
-    }
-
-    /**
-     * @return string
-     */
-    public function getPrivacyPolicyLink(): string
     {
         if(is_null($this->privacy_policy_url) )
             $this->privacy_policy_url = get_privacy_policy_url();
 
         return $this->privacy_policy_url;
+        // return $this->getPrivacyPolicyLink();
     }
+
+    // /**
+    //  * @return string
+    //  */
+    // public function getPrivacyPolicyLink(): string
+    // {
+    //     if(is_null($this->privacy_policy_url) )
+    //         $this->privacy_policy_url = get_privacy_policy_url();
+
+    //     return $this->privacy_policy_url;
+    // }
 
     /**
      * @return string
@@ -609,7 +605,6 @@ class Blog extends Entity
     }
 
     /**
-     * @deprecated
      */
     public function getNetworkHomeUrl($path = '', $scheme = null): string
     {

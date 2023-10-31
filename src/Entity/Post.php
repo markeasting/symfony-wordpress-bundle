@@ -389,7 +389,6 @@ class Post extends Entity
     }
     
     /**
-     * @deprecated
      * @return false|string
      */
     public function getUrl(){

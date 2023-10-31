@@ -260,11 +260,11 @@ class Comment extends Entity
 	}
 
 
-    /**
-     * @deprecated
-     */
-    public static function post($data){
+    // /**
+    //  * @deprecated
+    //  */
+    // public static function post($data){
 
-		return self::handleSubmission($data);
-	}
+	// 	return self::handleSubmission($data);
+	// }
 }

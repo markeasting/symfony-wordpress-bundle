@@ -4,7 +4,7 @@ namespace Metabolism\WordpressBundle\Helper;
 
 use App\Twig\AppExtension;
 use Metabolism\WordpressBundle\Twig\WordpressTwigExtension;
-use Twig\Environment;
+use Twig\Environment as TwigEnvironment;
 use Twig\Loader\FilesystemLoader;
 
 class TwigHelper {
@@ -14,9 +14,9 @@ class TwigHelper {
 	/**
 	 * Todo: use real symfony twig env
 	 *
-	 * @return Environment
+	 * @return TwigEnvironment
 	 */
-	public static function getEnvironment(): Environment
+	public static function getEnvironment(): TwigEnvironment
     {
 		if( !is_null(self::$env) )
 			return self::$env;
@@ -28,7 +28,7 @@ class TwigHelper {
 	    if( WP_ENV != 'dev' && is_dir( BASE_URI.'/var/cache') )
 		    $options['cache'] = BASE_URI.'/var/cache/'.WP_ENV.'/twig';
 
-	    $twig = new Environment($loader, $options);
+	    $twig = new TwigEnvironment($loader, $options);
 
 	    if( class_exists('App\Twig\AppExtension'))
 		    $twig->addExtension(new AppExtension());

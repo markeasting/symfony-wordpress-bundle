@@ -107,13 +107,13 @@ class ACFHelper implements ArrayAccess, \IteratorAggregate
         $this->data = $data;
     }
     
-    /**
-     * @deprecated
-     */
-    public function get_value($id){
+    // /**
+    //  * @deprecated
+    //  */
+    // public function get_value($id){
         
-        return $this->getValue($id);
-    }
+    //     return $this->getValue($id);
+    // }
     
     /**
      * @param $id
@@ -174,7 +174,7 @@ class ACFHelper implements ArrayAccess, \IteratorAggregate
     
     
     /**
-     * @deprecated Use Blog::getInstance instead
+     * @deprecated
      * @return array
      */
     public static function get($id){

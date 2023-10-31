@@ -153,14 +153,14 @@ class File extends Entity
 		return $this->description;
 	}
 
-	/**
-     * @deprecated
-	 * @return float|int
-	 */
-	public function getSize(){
+	// /**
+    //  * @deprecated
+	//  * @return float|int
+	//  */
+	// public function getSize(){
 
-		return $this->getFilesize();
-	}
+	// 	return $this->getFilesize();
+	// }
 
 	/**
 	 * @return float|int
@@ -190,19 +190,19 @@ class File extends Entity
      * @deprecated
      * @return string|null
      */
-    public function getUrl(){
-
+    public function getUrl()
+	{
         return $this->getLink();
     }
 
-    /**
-     * @deprecated
-     * @return string|null
-     */
-    public function getTarget(){
+    // /**
+    //  * @deprecated
+    //  * @return string|null
+    //  */
+    // public function getTarget(){
 
-        return '_blank';
-    }
+    //     return '_blank';
+    // }
 
 	/**
 	 * @return string
