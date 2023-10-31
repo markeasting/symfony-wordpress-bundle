@@ -119,7 +119,7 @@ class WordpressBundle extends Bundle
     /**
      * Called as mu-plugin from Wordpress
      */
-    public static function boostrap()
+    public static function bootstrap()
     {
 		$path = rtrim($_SERVER['REQUEST_URI'], '/');
 

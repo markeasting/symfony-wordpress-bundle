@@ -16,5 +16,5 @@ if (is_admin()) {
     $kernel->boot(); // Set up minimal DI container in admin interface
 }
 
-WordpressBundle::boostrap();
+WordpressBundle::bootstrap();
  
