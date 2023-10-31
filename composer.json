@@ -1,8 +1,8 @@
 {
-  "name":"metabolism/wordpress-bundle",
+  "name":"wildsea/wordpress-bundle",
   "type": "symfony-bundle",
   "version": "2.2.2",
-  "description": "Build enterprise solutions with WordPress",
+  "description": "Based on metabolism/wordpress-bundle",
   "license": "GPL-3.0-or-later",
   "keywords": [
     "framework",
@@ -85,8 +85,7 @@
       "copy": {
         "metabolism/wordpress-bundle": {
           "samples/public/wp-config.php": "public/wp-config.php",
-          "samples/public/wp-bundle/mu-plugins/wp-bundle.php": "public/wp-bundle/mu-plugins/wp-bundle.php",
-          "README.md": "docs/wordpress_bundle.md"
+          "samples/public/wp-bundle/mu-plugins/wp-bundle.php": "public/wp-bundle/mu-plugins/wp-bundle.php"
         }
       }
     },
