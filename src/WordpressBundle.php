@@ -123,8 +123,8 @@ class WordpressBundle extends Bundle
     {
 		$path = rtrim($_SERVER['REQUEST_URI'], '/');
 
-		/* /cms/ -> /cms/wp-admin */
-		/* /wp-admin/ -> /cms/wp-admin */
+		/* /cms/        ->   /cms/wp-admin */
+		/* /wp-admin/   ->   /cms/wp-admin */
 		if($path == WP_FOLDER || str_starts_with($path, '/wp-admin')){
 			Header('Location: ' . WP_FOLDER . '/wp-admin');
 			exit;
