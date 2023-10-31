@@ -53,12 +53,11 @@
     "wpackagist-plugin/relevanssi" : "Replaces the standard WordPress search with a better search engine, with lots of features and configurable options.",
     "wpackagist-plugin/contact-form-7" : "Manage multiple contact forms, plus you can customize the form and the mail contents",
     "wpackagist-plugin/wp-2fa" : "Harden your website login page; add two-factor authentication (2FA) for all your users with this easy to use plugin."
-
   },
   "extra": {
     "post-package-install": {
       "create": {
-        "metabolism/wordpress-bundle": {
+        "wildsea/wordpress-bundle": {
           "public/uploads": 775,
           "public/wp-bundle/upgrade": 775,
           "public/wp-bundle/languages": 775,
@@ -66,24 +65,23 @@
         }
       },
       "copy": {
-        "metabolism/wordpress-bundle": {
+        "wildsea/wordpress-bundle": {
           "samples/public/.htaccess": "public/.htaccess",
           "samples/public/wp-config.php": "public/wp-config.php",
           "config/wordpress.yaml": "config/packages/wordpress.yaml",
-          "samples/public/wp-bundle/mu-plugins/wp-bundle.php": "public/wp-bundle/mu-plugins/wp-bundle.php",
-          "README.md": "docs/wordpress_bundle.md"
+          "samples/public/wp-bundle/mu-plugins/wp-bundle.php": "public/wp-bundle/mu-plugins/wp-bundle.php"
         }
       }
     },
     "post-package-update": {
       "rename": {
-        "metabolism/wordpress-bundle": {
+        "wildsea/wordpress-bundle": {
           "config/packages/wordpress_bundle.yml": "config/packages/wordpress.yaml",
           "config/packages/wordpress.yml": "config/packages/wordpress.yaml"
         }
       },
       "copy": {
-        "metabolism/wordpress-bundle": {
+        "wildsea/wordpress-bundle": {
           "samples/public/wp-config.php": "public/wp-config.php",
           "samples/public/wp-bundle/mu-plugins/wp-bundle.php": "public/wp-bundle/mu-plugins/wp-bundle.php"
         }
