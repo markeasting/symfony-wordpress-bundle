@@ -177,7 +177,7 @@ class ConfigLoader
          * @see https://github.com/jerome-barbato/wordpress-bundle/issues/40
          */
         if (!defined('DISALLOW_FILE_MODS'))
-            define('DISALLOW_FILE_MODS', env('DISALLOW_FILE_MODS') ?: true);
+            define('DISALLOW_FILE_MODS', env('DISALLOW_FILE_MODS') ? env('DISALLOW_FILE_MODS') === 'true' : true);
 
         if (!defined('DISALLOW_FILE_EDIT'))
             define('DISALLOW_FILE_EDIT', true);
