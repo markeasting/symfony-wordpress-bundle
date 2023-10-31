@@ -1,0 +1,54 @@
+services:
+  _defaults:
+    autowire: true      # Automatically injects dependencies in your services.
+    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+  Symfony\Component\DependencyInjection\ContainerInterface: '@service_container'
+
+  Metabolism\WordpressBundle\ArgumentResolver\PostCollectionValueResolver:
+    tags:
+      - { name: controller.argument_value_resolver, priority: 50 }
+
+  Metabolism\WordpressBundle\ArgumentResolver\PostValueResolver:
+    tags:
+      - { name: controller.argument_value_resolver, priority: 50 }
+
+  Metabolism\WordpressBundle\ArgumentResolver\TermValueResolver:
+    tags:
+      - { name: controller.argument_value_resolver, priority: 50 }
+
+  Metabolism\WordpressBundle\ArgumentResolver\UserValueResolver:
+    tags:
+      - { name: controller.argument_value_resolver, priority: 50 }
+
+  Metabolism\WordpressBundle\Twig\TwigGlobalSubscriber:
+    tags:
+      - { name: kernel.event_listener, event: kernel.request }
+
+  Metabolism\WordpressBundle\:
+    resource: '../src/'
+    exclude:
+      - '../src/DependencyInjection/'
+      # - '../src/Action/'
+      - '../src/Entity/'
+      - '../src/Factory/'
+      - '../src/Helper/'
+      - '../src/Loader/'
+      - '../src/Traits/'
+
+  metabolism.action.wordpress_action:
+    class: Metabolism\WordpressBundle\Action\WordpressAction
+    public: true
+
+  metabolism.action.admin_action:
+    class: Metabolism\WordpressBundle\Action\AdminAction
+    public: true
+
+  metabolism.action.front_action:
+    class: Metabolism\WordpressBundle\Action\FrontAction
+    public: true
+
+  metabolism.action.login_action:
+    class: Metabolism\WordpressBundle\Action\LoginAction
+    public: true
+    

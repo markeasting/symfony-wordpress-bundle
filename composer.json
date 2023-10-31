@@ -1,0 +1,105 @@
+{
+  "name":"metabolism/wordpress-bundle",
+  "type": "symfony-bundle",
+  "version": "2.2.2",
+  "description": "Build enterprise solutions with WordPress",
+  "license": "GPL-3.0-or-later",
+  "keywords": [
+    "framework",
+    "symfony",
+    "wordpress",
+    "bundle",
+    "plugin"
+  ],
+  "require": {
+    "php" : ">=7.1.3",
+    "ext-gd": "*",
+    "ext-mysqli": "*",
+    "ext-openssl" : "*",
+    "ext-zip" : "*",
+    "ext-mbstring" : "*",
+    "ext-ctype" : "*",
+    "ext-iconv" : "*",
+    "ext-json" : "*",
+    "ext-pcre": "*",
+    "ext-simplexml": "*",
+    "ext-fileinfo" : "*",
+    "ext-session": "*",
+    "oscarotero/env": "^2.1",
+    "symfony/templating": "^4.0|^5.0",
+    "symfony/twig-bundle": "^4.0|^5.0",
+    "symfony/asset": "^4.0|^5.0",
+    "symfony/http-client": "^4.0|^5.0",
+    "metabolism/wordpress-core-installer": "^1.0",
+    "metabolism/package-actions": "^1.0",
+    "metabolism/wp-steroids": "^1.2.0",
+    "metabolism/void": "^2.0",
+    "johnpbloch/wordpress-core": "^5.0|^6.0",
+    "ifsnop/mysqldump-php":"^2.0",
+    "dflydev/dot-access-data":"^3.0",
+    "enshrined/svg-sanitize": "^0.15",
+    "intervention/image": "^2.0",
+    "kornrunner/blurhash": "^1.2.2"
+  },
+  "suggest": {
+    "metabolism/acf-extensions": "Extensions for ACF",
+    "wpackagist-plugin/advanced-custom-fields": "Customise WordPress with powerful, professional and intuitive fields.",
+    "wpackagist-plugin/classic-editor": "Restores the previous (« classic ») WordPress editor and the « Edit Post » screen.",
+    "wpackagist-plugin/wp-smartcrop": "Set the 'focal point' of any image, right from the media library",
+    "wpackagist-plugin/multisite-language-switcher": "Add multilingual support using a WordPress multisite",
+    "wpackagist-plugin/wordpress-seo": "The favorite WordPress SEO plugin of millions of users worldwide!",
+    "wpackagist-plugin/query-monitor": "Query Monitor is the developer tools panel for WordPress.",
+    "wpackagist-plugin/redirection" : "Easily manage 301 redirections, keep track of 404 errors",
+    "wpackagist-plugin/relevanssi" : "Replaces the standard WordPress search with a better search engine, with lots of features and configurable options.",
+    "wpackagist-plugin/contact-form-7" : "Manage multiple contact forms, plus you can customize the form and the mail contents",
+    "wpackagist-plugin/wp-2fa" : "Harden your website login page; add two-factor authentication (2FA) for all your users with this easy to use plugin."
+
+  },
+  "extra": {
+    "post-package-install": {
+      "create": {
+        "metabolism/wordpress-bundle": {
+          "public/uploads": 775,
+          "public/wp-bundle/upgrade": 775,
+          "public/wp-bundle/languages": 775,
+          "config/packages/acf": 775
+        }
+      },
+      "copy": {
+        "metabolism/wordpress-bundle": {
+          "samples/public/.htaccess": "public/.htaccess",
+          "samples/public/wp-config.php": "public/wp-config.php",
+          "config/wordpress.yaml": "config/packages/wordpress.yaml",
+          "samples/public/wp-bundle/mu-plugins/wp-bundle.php": "public/wp-bundle/mu-plugins/wp-bundle.php",
+          "README.md": "docs/wordpress_bundle.md"
+        }
+      }
+    },
+    "post-package-update": {
+      "rename": {
+        "metabolism/wordpress-bundle": {
+          "config/packages/wordpress_bundle.yml": "config/packages/wordpress.yaml",
+          "config/packages/wordpress.yml": "config/packages/wordpress.yaml"
+        }
+      },
+      "copy": {
+        "metabolism/wordpress-bundle": {
+          "samples/public/wp-config.php": "public/wp-config.php",
+          "samples/public/wp-bundle/mu-plugins/wp-bundle.php": "public/wp-bundle/mu-plugins/wp-bundle.php",
+          "README.md": "docs/wordpress_bundle.md"
+        }
+      }
+    },
+    "branch-alias": {
+      "dev-1.4.x": "1.4.x-dev",
+      "dev-2.0.x": "2.0.x-dev",
+      "dev-2.1.x": "2.1.x-dev",
+      "dev-2.2.x": "2.2.x-dev"
+    }
+  },
+  "autoload" : {
+    "psr-4" : {
+      "Metabolism\\WordpressBundle\\" : "src/"
+    }
+  }
+}
