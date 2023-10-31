@@ -16,7 +16,7 @@
  *   Page templates
  */
 
-if (!class_exists('App') && !defined('ABSPATH')){
+if (!class_exists('App') && !defined('ABSPATH')) {
     header("HTTP/1.0 404 Not Found");
     exit;
 }
@@ -26,14 +26,14 @@ use Symfony\Component\Dotenv\Dotenv;
 use Metabolism\WordpressBundle\Loader\ConfigLoader;
 use function Env\env;
 
-if( !class_exists('App') )
-    require dirname(__DIR__).'/vendor/autoload.php';
+if (!class_exists('App'))
+    require dirname(__DIR__) . '/vendor/autoload.php';
 
-if (!env('APP_ENV') ) {
+if (!env('APP_ENV')) {
     if (!class_exists(Dotenv::class))
         throw new RuntimeException('<code>APP_ENV environment variable is not defined. You need to define environment variables for configuration or add "symfony/dotenv" as a Composer dependency to load variables from a .env file.</code>');
 
-    (new Dotenv())->bootEnv(dirname(__DIR__).'/.env');
+    (new Dotenv())->bootEnv(dirname(__DIR__) . '/.env');
 }
 
 Env::$options = Env::USE_ENV_ARRAY;
