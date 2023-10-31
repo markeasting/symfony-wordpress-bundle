@@ -1,15 +1,9 @@
 # Symfony WordPress Bundle
+Project forked from the [Symfony Wordpress Bundle](https://github.com/jerome-barbato/wordpress-bundle).
 
-Build enterprise solutions with WordPress.
-
-[![Latest Stable Version](http://poser.pugx.org/metabolism/wordpress-bundle/v)](https://packagist.org/packages/metabolism/wordpress-bundle)
-[![Total Downloads](http://poser.pugx.org/metabolism/wordpress-bundle/downloads)](https://packagist.org/packages/metabolism/wordpress-bundle)
-[![Latest Unstable Version](http://poser.pugx.org/metabolism/wordpress-bundle/v/unstable)](https://packagist.org/packages/metabolism/wordpress-bundle)
-[![License](http://poser.pugx.org/metabolism/wordpress-bundle/license)](https://packagist.org/packages/metabolism/wordpress-bundle)
-[![Buy us a tree](https://img.shields.io/badge/Treeware-%F0%9F%8C%B3-lightgreen)](https://plant.treeware.earth/metabolism/wordpress-bundle)
 [![Doc - Gitbook](https://img.shields.io/badge/Doc-Gitbook-346ddb?logo=gitbook&logoColor=fff)](https://metabolism.gitbook.io/symfony-wordpress-bundle/)
 
-The Symfony WordPress Backoffice Bundle is a powerful library that seamlessly combines the flexibility of Symfony, a robust PHP framework, with the user-friendliness of WordPress, a popular content management system (CMS). 
+The Symfony WordPress Bundle is a powerful library that seamlessly combines the flexibility of Symfony, a robust PHP framework, with the user-friendliness of WordPress, a popular content management system (CMS). 
 
 This bundle enables you to harness Symfony's structure to develop highly customized web applications while using WordPress as the backend for content management. It simplifies the integration of WordPress into your Symfony project, allowing you to leverage the best of both worlds.
 
@@ -148,32 +142,7 @@ of the Composer documentation.
 
 ### Creating a new project
 
-```shell
-$ composer create-project metabolism/wordpress-skeleton my_project_directory
-```
-
-Please read the full [bundle installation guide](https://metabolism.gitbook.io/symfony-wordpress-bundle/getting-started/wordpress) to continue
-
-### Setting up an existing Symfony project
-
-Define installation path for WordPress core and plugins in `composer.json`
-
-```json
-"extra": {
-    "installer-paths": {
-        "public/wp-bundle/mu-plugins/{$name}/": ["type:wordpress-muplugin"],
-        "public/wp-bundle/plugins/{$name}/": ["type:wordpress-plugin"],
-        "public/wp-bundle/themes/{$name}/": ["type:wordpress-theme"],
-        "public/edition/": ["type:wordpress-core"]
-    }
-}
-```
-
-### Install the bundle
-
-```shell
-$ composer require metabolism/wordpress-bundle
-```
+See https://gitlab.com/wild-sea/wildpress/wildpress
 
 #### For applications that don't use Symfony Flex
 
@@ -190,16 +159,9 @@ return [
 
 Please read the full [bundle installation guide](https://metabolism.gitbook.io/symfony-wordpress-bundle/getting-started/wordpress) to continue
 
-## Demo
-
-https://github.com/wearemetabolism/wordpress-bundle-demo
-
-This is an implementation of the Twenty Nineteen WordPress theme for wordpress-bundle.
-
-[![Screenshot from 2021-05-03 10-08-22](https://user-images.githubusercontent.com/4919596/116854347-d8f2e180-abf7-11eb-9dec-29480cffa720.png)](https://user-images.githubusercontent.com/4919596/116854347-d8f2e180-abf7-11eb-9dec-29480cffa720.png)
-
 ## Recommended / tested plugins
 
+- [WP Steroids](https://github.com/jerome-barbato/wp-steroids) Manage Wordpress using Symfony yaml files + various enhancements
 - [Advanced custom fields](https://wordpress.org/plugins/advanced-custom-fields) Customise WordPress with powerful, professional and intuitive fields.
 - [ACF extensions](https://github.com/wearemetabolism/acf-extensions) Extensions for ACF
 - [Classic editor](https://wordpress.org/plugins/classic-editor) Restores the previous (« classic ») WordPress editor and the « Edit Post » screen.
@@ -210,21 +172,6 @@ This is an implementation of the Twenty Nineteen WordPress theme for wordpress-b
 - [Redirection](https://wordpress.org/plugins/redirection) Easily manage 301 redirections, keep track of 404 errors
 - [Contact form 7](https://wordpress.org/plugins/contact-form-7)  Manage multiple contact forms, plus you can customize the form and the mail contents
 
-## Roadmap
-
-* More samples
-* Global maintenance mode for multi-site
-* Unit tests
-* Better type hinting
-
-## Drawbacks
-
-WordPress' functions are available in the global namespace.
-
-Some WordPress plugins may not work ( ex : Woocommerce ) or require extra works.
-
 ## Licence
 
 GPL 3.0 or later
-
-This package is [Treeware](https://treeware.earth). If you use it in production, then we ask that you [**buy the world a tree**](https://plant.treeware.earth/metabolism/wordpress-bundle) to thank us for our work. By contributing to the Treeware forest you’ll be creating employment for local families and restoring wildlife habitats.
