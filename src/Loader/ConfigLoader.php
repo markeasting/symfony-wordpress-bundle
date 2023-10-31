@@ -89,7 +89,7 @@ class ConfigLoader
         if (isset($_SERVER['SERVER_NAME']) && filter_var($_SERVER['SERVER_NAME'], FILTER_VALIDATE_IP) !== false)
             define('COOKIE_DOMAIN', '');
         else
-            define('COOKIE_DOMAIN', strtok($_SERVER['HTTP_HOST'], ':'));
+            define('COOKIE_DOMAIN', isset($_SERVER['HTTP_HOST']) ? strtok($_SERVER['HTTP_HOST'], ':') : $wp_siteurl);
 
         /**
          * Define DB settings
