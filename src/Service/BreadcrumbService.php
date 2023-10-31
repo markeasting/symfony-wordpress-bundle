@@ -22,7 +22,7 @@ class BreadcrumbService
             return false;
         
         if( $args['add_home']??true )
-            $breadcrumb[] = ['title' => __('Home'), 'link' => $blog->getHomeLink()];
+            $breadcrumb[] = ['title' => __('Home'), 'link' => $blog->getHomeUrl()];
         
         if( ($args['data']??false) && is_array($args['data']) )
             $breadcrumb = array_merge($breadcrumb, $args['data']);
