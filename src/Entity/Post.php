@@ -13,8 +13,67 @@ use Metabolism\WordpressBundle\Repository\TermRepository;
  *
  * @package Metabolism\WordpressBundle\Entity
  */
-class Post extends Entity
+class Post extends Entity implements \JsonSerializable
 {
+    private static $jsonSerializeDepth = 0;
+    private static $jsonSerializeDepthMax = 2;
+
+    public static function setSerializeDepth(int $n)
+    {
+        self::$jsonSerializeDepthMax = $n;
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        if (self::$jsonSerializeDepth >= self::$jsonSerializeDepthMax) {
+            return $this->ID;
+        }
+
+        self::$jsonSerializeDepth++;
+
+        $serialized = [
+            'type' => $this->getType(),
+            'id' => $this->getID(),
+            'title' => $this->getTitle(),
+            'slug' => $this->getSlug(),
+            'content' => $this->getContent(),
+            // 'children' => $this->getChildren(),
+            
+            // @TODO should filter ACF query instead
+            // See https://www.advancedcustomfields.com/resources/acf-fields-post_object-query/
+            'status' => $this->getStatus() 
+        ];
+
+        $acf = $this->getCustomFields();
+
+        if ($acf) {
+            foreach ($acf->getFields() as $key => $value) {
+
+                if (is_array($value)) {
+                    $serialized[$key] = [];
+
+                    foreach ($value as $k => $val) {
+                        $serialized[$key][$k] = $this->_serialize($val);
+                    }
+                } else {
+                    $serialized[$key] = $this->_serialize($value);
+                }
+            }
+            self::$jsonSerializeDepth--;
+        }
+
+        return $serialized;
+    }
+
+    private function _serialize($value) 
+    {
+        if (is_object($value) && get_class($value)) {
+            return $value->jsonSerialize();
+        } else {
+            return $value;
+        }
+    }
+
     public $entity = 'post';
     
     protected $comment_status;
