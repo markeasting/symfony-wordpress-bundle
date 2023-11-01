@@ -39,13 +39,12 @@ class Permastruct
     public function addRoutes()
     {
 
+        $this->addRoute('robots', 'robots.txt', [], false, \Metabolism\WordpressBundle\Helper\RobotsHelper::class . '::doAction');
+        $this->addRoute('_site_health', '_site-health', [], false, \Metabolism\WordpressBundle\Helper\SiteHealthHelper::class . '::check');
+
         if (empty($this->locale)) {
-
-            $this->addRoute('_site_health', '_site-health', [], false, \Metabolism\WordpressBundle\Helper\SiteHealthHelper::class . '::check');
-            $this->addRoute('_cache_purge', '_cache/purge', [], false, \Metabolism\WordpressBundle\Helper\CacheHelper::class . '::purge');
-            $this->addRoute('_cache_clear', '_cache/clear', [], false, \Metabolism\WordpressBundle\Helper\CacheHelper::class . '::clear');
-
-            $this->addRoute('robots', 'robots.txt', [], false, \Metabolism\WordpressBundle\Helper\RobotsHelper::class . '::doAction');
+            // $this->addRoute('_cache_purge', '_cache/purge', [], false, \Metabolism\WordpressBundle\Helper\CacheHelper::class . '::purge');
+            // $this->addRoute('_cache_clear', '_cache/clear', [], false, \Metabolism\WordpressBundle\Helper\CacheHelper::class . '::clear');
         }
 
         global $_config;
@@ -112,11 +111,15 @@ class Permastruct
      */
     private function getControllerName($name)
     {
-
         $methodName = str_replace('_parent', '', $name);
         $methodName = str_replace(' ', '', lcfirst(ucwords(str_replace('_', ' ', $methodName))));
+        $method = $methodName . 'Action';
+        
+        $class = '\App\Controller\\' . $this->controller_name;
 
-        return 'App\Controller\\' . $this->controller_name . '::' . $methodName . 'Action';
+        return method_exists($class, $method)
+            ? $class . '::' . $method
+            : $class . '::' . 'fallbackAction';
     }
 
     /**
