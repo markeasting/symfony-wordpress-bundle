@@ -62,6 +62,14 @@ abstract class Entity implements ArrayAccess
 	/**
 	 * @return bool|ACFHelper
 	 */
+	public function getAcfHelper(){
+
+		return $this->custom_fields;
+	}
+
+	/**
+	 * @return bool|ACFHelper
+	 */
 	public function getCustomFields(){
 
 		return $this->custom_fields;

@@ -8,47 +8,49 @@ use Metabolism\WordpressBundle\Service\PaginationService;
 
 /**
  * Class Metabolism\WordpressBundle Framework
+ * @TODO extend ArrayCollection
  */
-class PostCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
+class PostCollection implements \IteratorAggregate, \Countable, \ArrayAccess
+{
 
-	private $query=false;
+	private $query = false;
 
-	private $args=[];
+	private $args = [];
 
-    protected $items=[];
+	protected $items = [];
 
 	protected $pagination;
 
 	/**
 	 * @param array|\WP_Query|null $args
 	 */
-	public function __construct($args=null)
+	public function __construct($args = null)
 	{
-        if( $args ){
+		if ($args) {
 
-			if( $args instanceof \WP_Query ){
+			if ($args instanceof \WP_Query) {
 
-                $this->query = $args;
-            }
-			else{
+				$this->query = $args;
+			} else {
 
-                $this->args = $args;
+				$this->args = $args;
 
-                if( !isset($args['fields']) )
-                    $args['fields'] = 'ids';
+				if (!isset($args['fields']))
+					$args['fields'] = 'ids';
 
-                $this->query = new \WP_Query( $args );
-            }
+				$this->query = new \WP_Query($args);
+			}
 
-			if( $this->query->posts )
+			if ($this->query->posts)
 				$this->setItems($this->query->posts);
-        }
-    }
+		}
+	}
 
 	/**
 	 * @return array
 	 */
-	public function getArgs(){
+	public function getArgs()
+	{
 
 		return $this->args;
 	}
@@ -56,47 +58,49 @@ class PostCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
 	/**
 	 * @return array
 	 */
-	public function getItems(){
+	public function getItems()
+	{
 
 		return $this->items;
 	}
 
-    /**
-     * @param array $posts
-     * @return void
-     */
-    public function setItems(array $posts){
+	/**
+	 * @param array $posts
+	 * @return void
+	 */
+	public function setItems(array $posts)
+	{
 
-        $posts = array_filter($posts);
-        $items = [];
+		$posts = array_filter($posts);
+		$items = [];
 
-        if( !isset($this->args['fields']) ){
+		if (!isset($this->args['fields'])) {
+			foreach ($posts as $post) {
+				$items[] = PostFactory::create($post);
+			}
+		} else {
 
-        foreach ($posts as $post)
-            $items[] = PostFactory::create( $post );
-        }
-        else{
+			$items = $posts;
+		}
 
-            $items = $posts;
-        }
-
-        $this->items = array_filter($items);
-    }
+		$this->items = array_filter($items);
+	}
 
 
 	/**
 	 * @param $args
 	 * @return array
 	 */
-	public function getPagination($args=[]){
+	public function getPagination($args = [])
+	{
 
-		if( !empty($args) ){
+		if (!empty($args)) {
 
 			$paginationService = new PaginationService();
 			return $paginationService->build($args, $this->query);
 		}
 
-		if( is_null($this->pagination) ){
+		if (is_null($this->pagination)) {
 
 			$paginationService = new PaginationService();
 			$this->pagination = $paginationService->build($args, $this->query);
@@ -109,7 +113,8 @@ class PostCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
 	/**
 	 * @return ArrayIterator|Post[]
 	 */
-	public function getIterator(): \Traversable {
+	public function getIterator(): \Traversable
+	{
 
 		return new ArrayIterator($this->items);
 	}
@@ -118,7 +123,8 @@ class PostCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
 	/**
 	 * @return \WP_Query
 	 */
-	public function getQuery() {
+	public function getQuery()
+	{
 
 		return $this->query;
 	}
@@ -147,10 +153,10 @@ class PostCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
 	 * @param $offset
 	 * @return Post|null
 	 */
-    #[\ReturnTypeWillChange]
+	#[\ReturnTypeWillChange]
 	public function offsetGet($offset)
 	{
-		return $this->items[$offset]??null;
+		return $this->items[$offset] ?? null;
 	}
 
 	/**
