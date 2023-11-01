@@ -22,7 +22,7 @@ class WordpressAction {
 		if( defined('WP_INSTALLING') && WP_INSTALLING )
 			return;
 
-        if (class_exists('\Roots\Bedrock\Autoloader') && is_blog_installed()) {
+        if (is_blog_installed()) {
             new \Roots\Bedrock\Autoloader();
         }
 

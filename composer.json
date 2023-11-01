@@ -39,7 +39,8 @@
     "dflydev/dot-access-data":"^3.0",
     "enshrined/svg-sanitize": "^0.15",
     "intervention/image": "^2.0",
-    "kornrunner/blurhash": "^1.2.2"
+    "kornrunner/blurhash": "^1.2.2",
+    "roots/bedrock-autoloader": "^1.0"
   },
   "suggest": {
     "metabolism/acf-extensions": "Extensions for ACF",
