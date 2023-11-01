@@ -125,15 +125,14 @@ class ACFHelper implements ArrayAccess, \IteratorAggregate
             return null;
         
         $field = $this->objects[$id];
-        
-        if( isset($field['value']) )
-            return $field['value'];
+
+        if(!isset($field['value'])) {
+            $value = acf_get_value( $this->entity_id, $field );
+            $field['value'] = acf_format_value( $value, $this->entity_id, $field );
+        }
         
         if( $this->data )
             acf_setup_meta($this->data, $this->id, true);
-        
-        $value = acf_get_value( $this->entity_id, $field );
-        $field['value'] = acf_format_value( $value, $this->entity_id, $field );
         
         $data = $this->format([$field]);
         
@@ -150,7 +149,7 @@ class ACFHelper implements ArrayAccess, \IteratorAggregate
         $this->getFieldObjects( true );
         $data = [];
         
-        foreach ($this->objects as $key=>$value){
+        foreach ($this->objects as $key => $value){
             $data[$key] = $this->getValue($key);
         }
         
