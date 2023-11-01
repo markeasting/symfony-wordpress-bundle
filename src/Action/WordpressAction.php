@@ -2,7 +2,6 @@
 
 namespace Metabolism\WordpressBundle\Action;
 
-
 /**
  * Class Metabolism\WordpressBundle Framework
  */
@@ -18,11 +17,14 @@ class WordpressAction {
      */
     public function loaded(){}
 
-
 	public function __construct()
 	{
 		if( defined('WP_INSTALLING') && WP_INSTALLING )
 			return;
+
+        if (class_exists('\Roots\Bedrock\Autoloader') && is_blog_installed()) {
+            new \Roots\Bedrock\Autoloader();
+        }
 
         add_action( 'init', [$this, 'init'], 99);
         add_action( 'kernel_loaded', [$this, 'loaded'], 99);
