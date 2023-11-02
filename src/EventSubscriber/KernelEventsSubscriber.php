@@ -69,7 +69,7 @@ class KernelEventsSubscriber implements EventSubscriberInterface
         if( defined('REST_REQUEST') )
             return;
         
-        global $wp, $locale;
+        global $wp, $wp_query, $locale;
 
         $request = $event->getRequest();
         
@@ -95,13 +95,14 @@ class KernelEventsSubscriber implements EventSubscriberInterface
                 $GLOBALS['wp_locale_switcher']->init();
             }
         }
-        
+
         $wp->init();
 
-        if( $wp->parse_request() ){
-
-            $wp->query_posts();
-            $wp->register_globals();
+        if (!isset($wp_query->query)) {
+            if ($wp->parse_request()){
+                $wp->query_posts();
+                $wp->register_globals();
+            }
         }
 
         do_action_ref_array( 'wp', array( &$wp ) );
