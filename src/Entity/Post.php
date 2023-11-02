@@ -15,17 +15,29 @@ use Metabolism\WordpressBundle\Repository\TermRepository;
  */
 class Post extends Entity implements \JsonSerializable
 {
-    private static $jsonSerializeDepth = 0;
-    private static $jsonSerializeDepthMax = 2;
+    private static int $jsonSerializeDepth = 0;
+    private static int $jsonSerializeDepthMax = 2;
+    private static array $jsonSerializeKeys = [];
 
-    public static function setSerializeDepth(int $n)
+    /**
+     * All fields registered for all custom post types. Stored as:
+     * [
+     *    \App\Entity\MyPostType => [field_keys => field_types]
+     * ]
+     *
+     * @var array
+     */
+    public static array $fields = [];
+
+    public static function setSerializeConfig(array $keys, int $maxDepth)
     {
-        self::$jsonSerializeDepthMax = $n;
+        self::$jsonSerializeKeys = $keys;
+        self::$jsonSerializeDepthMax = $maxDepth;
     }
 
     public function jsonSerialize(): mixed
     {
-        if (self::$jsonSerializeDepth >= self::$jsonSerializeDepthMax) {
+        if (self::$jsonSerializeDepth > self::$jsonSerializeDepthMax) {
             return $this->ID;
         }
 
@@ -46,15 +58,34 @@ class Post extends Entity implements \JsonSerializable
 
         $acf = $this->getCustomFields();
 
+        /** @see \App\Field\BaseField::add_fields_to_class() */
+        $fields_for_this_class = isset(self::$fields[$this->type])
+            ? array_keys(self::$fields[$this->type])
+            : [];
+
         if ($acf) {
+            $c = count(self::$jsonSerializeKeys);
+
             foreach ($acf->getFields() as $key => $value) {
+
+                if ($c > 0 && !in_array($key, self::$jsonSerializeKeys))
+                    continue;
+
+                if ($fields_for_this_class && !in_array($key, $fields_for_this_class))
+                    continue;
 
                 if (is_array($value)) {
                     $serialized[$key] = [];
 
-                    foreach ($value as $k => $val) {
-                        $serialized[$key][$k] = $this->_serialize($val);
+                    /* Handle 'image' type as sizes only */
+                    if (isset($value['sizes'])) {
+                        $serialized[$key] = array_merge(['url' => $value['url']], $value['sizes']);
+                    } else {
+                        foreach ($value as $k => $val) {
+                            $serialized[$key][$k] = $this->_serialize($val);
+                        }
                     }
+
                 } else {
                     $serialized[$key] = $this->_serialize($value);
                 }
