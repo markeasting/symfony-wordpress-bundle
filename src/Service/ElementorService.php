@@ -1,11 +1,11 @@
 <?php
 
-namespace Metabolism\WordpressBundle\Helper;
+namespace Metabolism\WordpressBundle\Service;
 
 use Metabolism\WordpressBundle\Entity\Post;
 use Twig\Environment as Twig;
 
-class ElementorHelper 
+class ElementorService 
 {
 
     /**
