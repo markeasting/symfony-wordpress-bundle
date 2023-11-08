@@ -48,7 +48,7 @@ class Post extends Entity implements \JsonSerializable
             'id' => $this->getID(),
             'title' => $this->getTitle(),
             'slug' => $this->getSlug(),
-            'content' => $this->getContent(),
+            'content' => $this->getRawContent(),
             // 'children' => $this->getChildren(),
             
             // @TODO should filter ACF query instead
@@ -567,6 +567,10 @@ class Post extends Entity implements \JsonSerializable
             $this->getBlocks();
         
         return in_array($name, $this->blocks_list);
+    }
+
+    public function getRawContent(){
+        return $this->post->post_content;
     }
     
     /**
