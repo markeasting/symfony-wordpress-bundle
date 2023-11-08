@@ -36,6 +36,31 @@ class AdminAction {
 		}
 	}
 
+	public function deploymentBadge()
+	{
+		if(isset($_ENV['FORGE_BUILD_BADGE']) && current_user_can('administrator')){
+
+			add_action('wp_dashboard_setup', function() {
+				wp_add_dashboard_widget('deployment-state', 'Wildpress deployment state', function() {
+					echo '<span class="ab-label"><img src="'.$_ENV['FORGE_BUILD_BADGE'].'&v='.uniqid().'"/></span>';
+				});
+			});
+
+			// add_action('admin_bar_menu', function(\WP_Admin_Bar $wp_admin_bar)	{
+
+			// 	$args = [
+			// 		'id'    => 'forge-deployment',
+			// 		'title' => '<span class="ab-icon">
+			// 			<span class="ab-label"><img src="'.$_ENV['FORGE_BUILD_BADGE'].'&v='.uniqid().'"/></span>
+			// 		</span>',
+			// 		'href'  => '#'
+			// 	];
+
+			// 	$wp_admin_bar->add_node( $args );
+
+			// }, 999);
+		}
+	}
 
 	public function __construct()
 	{
@@ -45,5 +70,6 @@ class AdminAction {
 		$this->lock();
 
 		add_action( 'admin_init', [$this, 'init'], 99 );
+		add_action( 'admin_init', [$this, 'deploymentBadge'], 99 );
 	}
 }
