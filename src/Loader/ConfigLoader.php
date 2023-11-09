@@ -49,6 +49,7 @@ class ConfigLoader
         /**
          * Define basic environment
          */
+        define('WP_ENVIRONMENT_TYPE', $env == 'dev' ? 'development' : 'production');
         define('WP_ENV', $env);
         define('WP_DEBUG', $env === 'dev');
         define('WP_DEBUG_DISPLAY', WP_DEBUG);
