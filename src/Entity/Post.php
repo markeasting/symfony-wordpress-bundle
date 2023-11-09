@@ -7,14 +7,19 @@ use Metabolism\WordpressBundle\Factory\PostFactory;
 use Metabolism\WordpressBundle\Repository\CommentRepository;
 use Metabolism\WordpressBundle\Repository\PostRepository;
 use Metabolism\WordpressBundle\Repository\TermRepository;
+use Metabolism\WordpressBundle\Traits\SerializableTrait;
 
 /**
  * Class Post
  *
+ * @TODO implement SerializableTrait? Should work with an ACF CustomField attribute
+ * 
  * @package Metabolism\WordpressBundle\Entity
  */
 class Post extends Entity implements \JsonSerializable
 {
+    // use SerializableTrait;
+
     private static int $jsonSerializeDepth = 0;
     private static int $jsonSerializeDepthMax = 2;
     private static array $jsonSerializeKeys = [];
