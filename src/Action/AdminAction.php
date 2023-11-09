@@ -38,7 +38,7 @@ class AdminAction {
 
 	public function deploymentBadge()
 	{
-		if(isset($_ENV['FORGE_BUILD_BADGE']) && current_user_can('administrator')){
+		if (isset($_ENV['FORGE_BUILD_BADGE'])){
 
 			add_action('wp_dashboard_setup', function() {
 				wp_add_dashboard_widget('deployment-state', 'Wildpress deployment state', function() {
