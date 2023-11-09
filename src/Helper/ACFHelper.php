@@ -209,7 +209,7 @@ class ACFHelper implements ArrayAccess, \IteratorAggregate
         if ($cached = wp_cache_get($this->entity_id, 'acf_helper')) {
             $this->objects = $cached;
         } else {
-            $this->objects = get_field_objects($this->entity_id, $load_value, $load_value);
+            $this->objects = get_field_objects($this->entity_id, $load_value, $load_value) ?: [];
             wp_cache_set($this->entity_id, $this->objects, 'acf_helper');
         }
 
