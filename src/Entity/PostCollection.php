@@ -51,7 +51,6 @@ class PostCollection implements \IteratorAggregate, \Countable, \ArrayAccess
 	 */
 	public function getArgs()
 	{
-
 		return $this->args;
 	}
 
@@ -60,8 +59,32 @@ class PostCollection implements \IteratorAggregate, \Countable, \ArrayAccess
 	 */
 	public function getItems()
 	{
-
 		return $this->items;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function toArray()
+	{
+		return $this->items;
+	}
+
+
+	/**
+	 * @param callable<Post> $callback
+	 */
+	public function map(callable $callback)
+	{
+		return array_map($callback, $this->items);
+	}
+
+	/**
+	 * @param callable<Post> $callback
+	 */
+	public function filter(callable $callback)
+	{
+		return array_filter($this->items, $callback);
 	}
 
 	/**
