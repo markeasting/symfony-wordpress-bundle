@@ -197,6 +197,11 @@ class Post extends Entity implements \JsonSerializable
         return $post;
     }
 
+    public function getPostObject() : \WP_Post|bool
+    {
+        return $this->post;
+    }
+
     /**
      * @return string
      */
