@@ -2,7 +2,6 @@
 
 namespace Metabolism\WordpressBundle\Helper;
 
-use App\Twig\AppExtension;
 use Metabolism\WordpressBundle\Twig\WordpressTwigExtension;
 use Twig\Environment as TwigEnvironment;
 use Twig\Loader\FilesystemLoader;
@@ -30,8 +29,8 @@ class TwigHelper {
 
 	    $twig = new TwigEnvironment($loader, $options);
 
-	    if( class_exists('App\Twig\AppExtension'))
-		    $twig->addExtension(new AppExtension());
+	    // if( class_exists('App\Twig\AppExtension'))
+		//     $twig->addExtension(new AppExtension());
 
 	    if( class_exists('\Twig\Extra\Intl\IntlExtension'))
 		    $twig->addExtension(new \Twig\Extra\Intl\IntlExtension());
