@@ -113,10 +113,11 @@ class ACFHelper implements ArrayAccess, \IteratorAggregate
     }
 
     /**
-     * @param $id
+     * @param mixed $id
+     * @param bool $raw
      * @return mixed
      */
-    public function getValue($id)
+    public function getValue($id, $raw = false)
     {
 
         if (!$this->has($id))
@@ -132,11 +133,13 @@ class ACFHelper implements ArrayAccess, \IteratorAggregate
         if ($this->data)
             acf_setup_meta($this->data, $this->id, true);
 
-        $data = $this->format([$field]);
-
-        $this->objects[$id]['value'] = $data[$id] ?? null;
-
-        return $this->objects[$id]['value'];
+        if ($raw) {
+            return get_field($id, $this->id, false);
+        } else {
+            $data = $this->format([$field]);
+            $this->objects[$id]['value'] = $data[$id] ?? null;
+            return $this->objects[$id]['value'];
+        }
     }
 
     public function all()

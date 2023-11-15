@@ -76,15 +76,16 @@ abstract class Entity implements ArrayAccess
 	}
 
 	/**
-	 * @param $id
+	 * @param mixed $id
+	 * @param bool $raw
 	 * @return mixed
 	 */
-	public function getCustomField($id){
+	public function getCustomField($id, $raw = false){
 
 		if( !$this->custom_fields )
 			return false;
 
-		return $this->custom_fields->getValue($id);
+		return $this->custom_fields->getValue($id, $raw);
 	}
 
 	/**
