@@ -3,21 +3,15 @@
 namespace Metabolism\WordpressBundle\Action;
 
 /**
- * Class Metabolism\WordpressBundle Framework
+ * @TODO fix this action, doesn't work since the kernel / container isn't loaded 
+ * on the login screen.
  */
-class LoginAction {
+class LoginAction 
+{
 
-	/**
-	 * Init placeholder
-	 */
-	public function init(){}
+    /**
+     * Called on the 'init' hook
+     */
+    public function init() {}
 
-
-	public function __construct()
-	{
-		if( defined('WP_INSTALLING') && WP_INSTALLING )
-			return;
-
-		$this->init();
-	}
 }

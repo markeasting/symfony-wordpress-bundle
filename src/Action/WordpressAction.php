@@ -3,30 +3,19 @@
 namespace Metabolism\WordpressBundle\Action;
 
 /**
- * Class Metabolism\WordpressBundle Framework
+ * Loaded on Wordpress front-end and admin
  */
-class WordpressAction {
+class WordpressAction 
+{
 
     /**
-     * Init placeholder
+     * Called on the 'init' hook
      */
-    public function init(){}
+    public function init() {}
 
     /**
-     * Loaded placeholder
+     * Called on the 'kernel_loaded' hook
      */
-    public function loaded(){}
+    public function loaded() {}
 
-	public function __construct()
-	{
-		if( defined('WP_INSTALLING') && WP_INSTALLING )
-			return;
-
-        if (is_blog_installed()) {
-            new \Roots\Bedrock\Autoloader();
-        }
-
-        add_action( 'init', [$this, 'init'], 99);
-        add_action( 'kernel_loaded', [$this, 'loaded'], 99);
-	}
 }

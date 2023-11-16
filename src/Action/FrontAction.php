@@ -2,36 +2,20 @@
 
 namespace Metabolism\WordpressBundle\Action;
 
-
 /**
- * Class Metabolism\WordpressBundle Framework
+ * Loaded only on Wordpress front-end
  */
-class FrontAction {
+class FrontAction 
+{
 
-	/**
-	 * @var string plugin domain name for translations
-	 */
-	public static $languages_folder;
+    /**
+     * Called on the 'init' hook
+     */
+    public function init() {}
 
-	public static $domain_name = 'default';
+    /**
+     * Called on the 'kernel_loaded' hook
+     */
+    public function loaded() {}
 
-	/**
-	 * Init placeholder
-	 */
-	public function init(){}
-
-	/**
-	 * Loaded placeholder
-	 */
-	public function loaded(){}
-
-	public function __construct()
-	{
-		if( defined('WP_INSTALLING') && WP_INSTALLING )
-			return;
-
-        add_action( 'kernel_loaded', [$this, 'loaded']);
-        add_action( 'init', [$this, 'init']);
-		add_action( 'init', '_wp_admin_bar_init', 0 );
-	}
 }

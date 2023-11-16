@@ -4,6 +4,8 @@ namespace Metabolism\WordpressBundle;
 
 use Env\Env;
 use Metabolism\WordpressBundle\Helper\PathHelper;
+use Metabolism\WordpressBundle\Loader\WordpressLoader;
+use Metabolism\WordpressBundle\Loader\WordpressRegisterable;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -16,6 +18,7 @@ class WordpressBundle extends Bundle
     private string $public_dir;
     private string $log_dir;
     private RouterInterface $router;
+    private WordpressLoader $wordpressLoader;
 
     public static $instance = null;
 
@@ -31,6 +34,7 @@ class WordpressBundle extends Bundle
 
     public function boot()
     {
+
         Env::$options = Env::USE_ENV_ARRAY;
 
         $kernel = $this->container->get('kernel');
@@ -38,6 +42,8 @@ class WordpressBundle extends Bundle
         $this->log_dir = $kernel->getLogDir();
         $this->root_dir = $kernel->getProjectDir();
         $this->router = $this->container->get('router');
+
+        $this->wordpressLoader = $this->container->get('metabolism.loader.wordpress_loader');
 
         $this->public_dir = $this->root_dir . (is_dir($this->root_dir . '/public') ? '/public' : '/web');
 
@@ -47,9 +53,13 @@ class WordpressBundle extends Bundle
 
     public function build(ContainerBuilder $container)
     {
+        $container->registerForAutoconfiguration(WordpressRegisterable::class)
+            ->addTag('wordpress.registerable');
+
         $container->addCompilerPass(new class () implements CompilerPassInterface {
             public function process(ContainerBuilder $container): void
             {
+
                 if (class_exists('\App\Action\WordpressAction')) {
                     $container->getDefinition('metabolism.action.wordpress_action')
                         ->setClass('\App\Action\WordpressAction');
@@ -117,30 +127,48 @@ class WordpressBundle extends Bundle
     }
 
     /**
-     * Called as mu-plugin from Wordpress
+     * Called from the main mu-plugin entrypoint
+     * The reason for this is that the WP core has to be loaded before we can use 
      */
     public static function bootstrap()
     {
-		$path = rtrim($_SERVER['REQUEST_URI'], '/');
+        if (defined('WP_INSTALLING') && WP_INSTALLING)
+            return;
 
-		/* /cms/        ->   /cms/wp-admin */
-		/* /wp-admin/   ->   /cms/wp-admin */
-		if($path == WP_FOLDER || str_starts_with($path, '/wp-admin')){
-			Header('Location: ' . WP_FOLDER . '/wp-admin');
-			exit;
-		}
+        /** 
+         * Redirect login paths:
+         * 
+         * /WP_FOLDER   >  /WP_FOLDER/wp-admin
+         * /wp-admin    >  /WP_FOLDER/wp-admin
+         */
+        $path = rtrim($_SERVER['REQUEST_URI'], '/');
+        if ($path == WP_FOLDER || str_starts_with($path, '/wp-admin')) {
+            Header('Location: ' . WP_FOLDER . '/wp-admin');
+            exit;
+        }
+
+        if (is_blog_installed()) {
+            new \Roots\Bedrock\Autoloader();
+        }
 
         self::loadPlugins();
-
-        // dd($kernel->getContainer()->get('WordpressBundle'));
+        
         if (self::$instance) {
-            self::$instance->loadActions(); // @TODO pass self->container here
+            self::$instance->loadTaggedServices(self::$instance->wordpressLoader);
+            self::$instance->loadActions();
         }
     }
 
+    /**
+     * @TODO handle using service tagging
+     * 
+     * Called from the main mu-plugin entrypoint
+     * @see WordpressBundle::bootstrap()
+     * 
+     * @return void
+     */
     private static function loadPlugins()
     {
-
         $plugins = scandir(__DIR__ . '/Plugin');
 
         foreach ($plugins as $plugin) {
@@ -154,28 +182,62 @@ class WordpressBundle extends Bundle
         }
     }
 
+    /**
+     * Called from the main mu-plugin entrypoint
+     * @see WordpressBundle::bootstrap()
+     * @see \Metabolism\WordpressBundle\Loader\WordpressRegisterable
+     * 
+     * @param WordpressLoader $wordpressLoader
+     * @return void
+     */
+    private function loadTaggedServices(WordpressLoader $wordpressLoader)
+    {
+        add_action('init', [$wordpressLoader, 'register']);
+    }
+
+    /**
+     * Called from the main mu-plugin entrypoint
+     * @see WordpressBundle::bootstrap()
+     * 
+     * @return void
+     */
     private function loadActions()
     {
-        /* This will also instantiate the classes, registering WP hooks */
-
-        // @TODO this one doesn't seem to work, bundle not loaded on login page
+        /* Note, loginAction doesn't work, because the kernel isn't loaded at this point */
         if (self::isLoginUrl()) {
             $loginAction = $this->container->get('metabolism.action.login_action');
+            $loginAction->init();
 
             return;
         }
 
         if (is_admin()) {
+
+            /* wp-admin only actions */
             $adminAction = $this->container->get('metabolism.action.admin_action');
+            add_action('admin_init', [$adminAction, 'init'], 99);
+            add_action('admin_init', [$adminAction, 'deploymentBadge'], 99);
+
         } else {
+
+            /* Frontend only actions */
             $frontAction = $this->container->get('metabolism.action.front_action');
+            add_action('kernel_loaded', [$frontAction, 'loaded']);
+            add_action('init', [$frontAction, 'init']);
+            add_action('init', '_wp_admin_bar_init', 0);
         }
 
+        /* General only actions */
         $wordpressAction = $this->container->get('metabolism.action.wordpress_action');
+        add_action('init', [$wordpressAction, 'init'], 99);
+        add_action('kernel_loaded', [$wordpressAction, 'loaded'], 99);
+
+        /* Prevent overwriting .htaccess */
+        add_filter('flush_rewrite_rules_hard', '__return_false');
     }
 
     /**
-     * 	@see wp-includes/class-wp.php, main function
+     * @see wp-includes/class-wp.php, main function
      */
     private function loadWordpress()
     {
