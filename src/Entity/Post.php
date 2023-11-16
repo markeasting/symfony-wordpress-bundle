@@ -4,6 +4,7 @@ namespace Metabolism\WordpressBundle\Entity;
 
 use Metabolism\WordpressBundle\Factory\Factory;
 use Metabolism\WordpressBundle\Factory\PostFactory;
+use Metabolism\WordpressBundle\Loader\WordpressRegisterable;
 use Metabolism\WordpressBundle\Repository\CommentRepository;
 use Metabolism\WordpressBundle\Repository\PostRepository;
 use Metabolism\WordpressBundle\Repository\TermRepository;
@@ -16,8 +17,17 @@ use Metabolism\WordpressBundle\Traits\SerializableTrait;
  * 
  * @package Metabolism\WordpressBundle\Entity
  */
-class Post extends Entity implements \JsonSerializable
+class Post extends Entity implements WordpressRegisterable, \JsonSerializable
 {
+
+    static string $post_type = 'post';
+
+    public function register(): void
+    {
+        // Override in custom post types
+        // register_post_type(self::$post_type, [...]) ...
+    }
+
     // use SerializableTrait;
 
     private static int $jsonSerializeDepth = 0;
