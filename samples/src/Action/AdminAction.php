@@ -2,19 +2,25 @@
 
 namespace App\Action;
 
-use Metabolism\WordpressBundle\Action\AdminAction as WordpressAdminController;
+use Metabolism\WordpressBundle\Action\AdminAction as WordpressAdminAction;
 
-class AdminAction extends WordpressAdminController
+/**
+ * Loaded only on Wordpress admin panel
+ */
+class AdminAction extends WordpressAdminAction 
 {
-	/**
-	 * Execute code when the admin is loaded
-	 * Equivalent to if( is_admin() ) add_action('admin_init', function(){ })
-	 *
-	 * If you want to execute code for both admin and front, create a WordpressController
-	 * please take a loot a samples/controller/WordpressController.php in /vendor/metabolism/wordpress-bundle
-	 */
-	public function init()
-	{
-		//add_action
-	}
+
+	public function init() 
+    {
+
+        /* Remove admin dashboard widgets. */
+        add_action('wp_dashboard_setup', function () {
+            remove_meta_box('dashboard_activity', 'dashboard', 'normal'); // Activity
+            remove_meta_box('dashboard_right_now', 'dashboard', 'normal'); // At a Glance
+            remove_meta_box('dashboard_site_health', 'dashboard', 'normal'); // Site Health Status
+            remove_meta_box('dashboard_primary', 'dashboard', 'side'); // WordPress Events and News
+            remove_meta_box('dashboard_quick_press', 'dashboard', 'side'); // Quick Draft
+        });
+    }
+
 }

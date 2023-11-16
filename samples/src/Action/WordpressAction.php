@@ -2,16 +2,15 @@
 
 namespace App\Action;
 
-use Metabolism\WordpressBundle\Action\WordpressAction as WordpressSuperController;
+use Metabolism\WordpressBundle\Action\WordpressAction as WordpressBaseAction;
 
-class WordpressAction extends WordpressSuperController
+/**
+ * Loaded on Wordpress front-end and admin
+ */
+class WordpressAction extends WordpressBaseAction
 {
-	/**
-	 * Execute code when the admin or front is loaded
-	 * Equivalent to add_action('init', function(){ })
-	 */
 	public function init()
 	{
-		//add_action
+
 	}
 }
