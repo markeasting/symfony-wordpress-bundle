@@ -23,14 +23,10 @@ class MailPlugin
 			$this->setSMTPConfig($dsn);
 
 			if ($this->_smtp_config['scheme'] != null) {
-
-				// add_filter( 'wp_mail', function() {
-				// 	dd('asdsa');
-				// });
 				
-				add_action('wp_mail_failed', function ($wp_error) {
-					dd($wp_error);
-				}, 10, 1);
+				// add_action('wp_mail_failed', function ($wp_error) {
+				// 	dd($wp_error);
+				// }, 10, 1);
 
 				add_action('phpmailer_init', array($this, 'configureSmtp'));
 				add_filter('wp_mail_content_type', function () { return "text/html"; });
