@@ -117,9 +117,13 @@ class Permastruct
         
         $class = '\App\Controller\\' . $this->controller_name;
 
+        $fallback = str_contains($name, 'archive') 
+            ? 'fallbackArchiveAction' 
+            : 'fallbackAction';
+
         return method_exists($class, $method)
             ? $class . '::' . $method
-            : $class . '::' . 'fallbackAction';
+            : $class . '::' . $fallback;
     }
 
     /**
