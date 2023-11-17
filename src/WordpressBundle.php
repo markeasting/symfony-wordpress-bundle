@@ -215,8 +215,8 @@ class WordpressBundle extends Bundle
 
             /* wp-admin only actions */
             $adminAction = $this->container->get('metabolism.action.admin_action');
+            // add_action('kernel_loaded', [$adminAction, 'loaded']);
             add_action('admin_init', [$adminAction, 'init'], 99);
-            add_action('admin_init', [$adminAction, 'deploymentBadge'], 99);
 
         } else {
 
@@ -229,8 +229,8 @@ class WordpressBundle extends Bundle
 
         /* General only actions */
         $wordpressAction = $this->container->get('metabolism.action.wordpress_action');
-        add_action('init', [$wordpressAction, 'init'], 99);
         add_action('kernel_loaded', [$wordpressAction, 'loaded'], 99);
+        add_action('init', [$wordpressAction, 'init'], 99);
 
         /* Prevent overwriting .htaccess */
         add_filter('flush_rewrite_rules_hard', '__return_false');
