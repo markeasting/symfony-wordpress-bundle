@@ -1,13 +1,16 @@
 <?php
 
 namespace Metabolism\WordpressBundle\Plugin;
+use Metabolism\WordpressBundle\WordpressBundle;
 
 class UpdatePlugin
 {
 
     public function __construct()
     {
-        $this->disableUpdate();
+        // $this->enableAutoUpdates();
+        $this->disablePluginUpdates();
+        $this->disablePlugins();
 
         add_action('admin_head', function() {
             if (!current_user_can('update_core')) {
@@ -16,11 +19,16 @@ class UpdatePlugin
         }, 1);
     }
 
+    // private function enableAutoUpdates()
+    // {
+    // }
+
     /**
      * Disable WordPress auto update and checks
      */
-    protected function disableUpdate()
+    private function disablePluginUpdates()
     {
+        wp_clear_scheduled_hook('wp_update_themes');
 
         remove_action('admin_init', '_maybe_update_core');
         remove_action('wp_version_check', 'wp_version_check');
@@ -39,5 +47,34 @@ class UpdatePlugin
         remove_action('init', 'wp_schedule_update_checks');
 
         add_filter('plugins_auto_update_enabled', '__return_false');
+    }
+
+    public function disablePlugins()
+    {
+        if (!is_admin() && !WordpressBundle::isLoginUrl()) {
+            if (is_multisite())
+                add_filter('site_option_active_sitewide_plugins', [$this, 'disableWP2FA']);
+
+            add_filter('option_active_plugins', [$this, 'disableWP2FA']);
+        }
+    }
+
+    /**
+     * Disable wp-2fa because of a Symfony class collision
+     *
+     * @param [type] $plugins
+     * @return void
+     */
+    public function disableWP2FA($plugins)
+    {
+        $wp_2fa = "wp-2fa/wp-2fa.php";
+
+        if ($k = array_search($wp_2fa, $plugins))
+            unset($plugins[$k]);
+
+        if (isset($plugins[$wp_2fa]))
+            unset($plugins[$wp_2fa]);
+
+        return $plugins;
     }
 }
