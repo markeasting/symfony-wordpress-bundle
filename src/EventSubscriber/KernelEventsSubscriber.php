@@ -2,6 +2,7 @@
 
 namespace Metabolism\WordpressBundle\EventSubscriber;
 
+use Metabolism\WordpressBundle\Plugin\MaintenancePlugin;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
@@ -53,8 +54,8 @@ class KernelEventsSubscriber implements EventSubscriberInterface
     {
         if ( !$event->isMainRequest() )
             return;
-        
-        if( wp_is_maintenance_mode() || (function_exists('wp_maintenance_mode') && wp_maintenance_mode()) )
+
+        if( wp_is_maintenance_mode() || MaintenancePlugin::isMaintenance() )
             throw new \Exception('Service Unavailable', 503);
     }
     
