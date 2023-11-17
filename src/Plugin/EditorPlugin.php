@@ -7,6 +7,8 @@ class EditorPlugin
 
     public function __construct()
     {
+        add_filter('admin_footer_text', '__return_empty_string');
+
         if (is_admin()) {
             add_action('admin_head', [$this, 'adminHead']);
         }
