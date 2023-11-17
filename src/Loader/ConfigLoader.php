@@ -190,13 +190,13 @@ class ConfigLoader
             define('WP_POST_REVISIONS', 3);
 
         if (!defined('DISABLE_WP_CRON'))
-            define('DISABLE_WP_CRON', true);
+            define('DISABLE_WP_CRON', env('DISABLE_WP_CRON') ? env('DISABLE_WP_CRON') === 'true' : true);
 
         if (!defined('WP_DISABLE_FATAL_ERROR_HANDLER'))
             define('WP_DISABLE_FATAL_ERROR_HANDLER', true);
 
         if (!defined('WP_DEFAULT_THEME'))
-            define('WP_DEFAULT_THEME', 'empty');
+            define('WP_DEFAULT_THEME', 'void');
 
         foreach (['HEADLESS', 'URL_MAPPING', 'BUILD_HOOK', 'BUILD_BADGE', 'GOOGLE_MAP_API_KEY', 'GOOGLE_TRANSLATE_KEY', 'DEEPL_KEY'] as $key) {
             if (!defined($key))
