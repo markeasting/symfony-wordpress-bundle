@@ -15,6 +15,11 @@ class ACFPlugin
      */
     public function __construct()
     {
+        // @TODO use WordpressBundle::root_dir?
+        $jsonPath = realpath(ABSPATH . '../..' . '/config/packages/acf');
+        add_filter('acf/settings/save_json', function() use($jsonPath){ return $jsonPath; });
+        add_filter('acf/settings/load_json', function() use($jsonPath){ return [$jsonPath]; });
+
         $acf_settings = [
             'autoload' => true,
             'use_entity' => true,   // Optimized Post entity return format
