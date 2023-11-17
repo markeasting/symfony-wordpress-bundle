@@ -4,11 +4,6 @@ namespace Metabolism\WordpressBundle\Plugin;
 
 use function Env\env;
 
-/**
- * Class MailPlugin
- * @description Send Emails from custom SMTP set in .env
- * @package Metabolism\WordpressBundle\Plugin
- */
 class MailPlugin
 {
 
@@ -91,7 +86,7 @@ class MailPlugin
 	 */
 	public function configureSmtp($phpmailer)
 	{
-		$phpmailer->SMTPDebug = 1;
+		// $phpmailer->SMTPDebug = 1;
 		$phpmailer->isSMTP();
 		$phpmailer->Host = $this->_smtp_config['host'];
 		$phpmailer->Port = $this->_smtp_config['port'] ?? 25;
