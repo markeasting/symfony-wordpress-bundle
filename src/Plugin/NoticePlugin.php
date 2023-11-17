@@ -4,18 +4,33 @@ namespace Metabolism\WordpressBundle\Plugin;
 
 use function Env\env;
 
-/**
- * Class
- */
 class NoticePlugin
 {
+
+    public function __construct()
+    {
+
+        add_action('init', [$this, 'environmentInfo']);
+
+        if (is_admin()) {
+
+            add_action('admin_notices', [$this, 'adminNotices']);
+
+        } else {
+
+            // if (defined('HEADLESS') && HEADLESS)
+            //     add_action('init', function() {
+            //         global $wpdb;
+            //         $wpdb->suppress_errors = true;
+            //     });
+        }
+    }
 
     /**
      * Check symlinks and folders
      */
     public function adminNotices()
     {
-
         $currentScreen = get_current_screen();
 
         if (!current_user_can('administrator') || $currentScreen->base != 'dashboard')
@@ -62,45 +77,39 @@ class NoticePlugin
      */
     public function environmentInfo()
     {
-
         add_action('admin_bar_menu', function ($wp_admin_bar) {
+
+            $ENV = env('APP_ENV');
+
+            $color = match ($ENV) {
+                'dev' => '#4ebd0d',
+                // 'prod' => '#df0f0f',
+                default => false,
+            };
+
+            if (!$color)
+                return;
+
+            $args = [
+                'id' => 'environment',
+                'title' => '<style>.wp-environment-badge { background-color: '.$color.' !important; }</style><span>'.strtoupper($ENV).'</span>',
+                'href' => '#',
+                'meta'  => array(
+                    'class' => 'wp-environment-badge',
+                    'style' => 'background-color: '.$color.';',
+                ),
+            ];
+
+            $wp_admin_bar->add_node($args);
+            
             $args = [
                 'id' => 'debug',
-                'title' => '<span style="position: fixed; left: 0; top: 0; width: 100%; background: #df0f0f; height: 2px; z-index: 99999"></span>',
+                'title' => '<span style="position: fixed; left: 0; top: 0; width: 100%; background: '.$color.'; height: 2px; z-index: 99999"></span>',
                 'href' => '#',
             ];
 
             $wp_admin_bar->add_node($args);
 
         }, 9999);
-    }
-
-
-    /**
-     * remove wpdb error
-     */
-    public function suppressError()
-    {
-
-        global $wpdb;
-        $wpdb->suppress_errors = true;
-    }
-
-
-    /**
-     * NoticePlugin constructor.
-     */
-    public function __construct()
-    {
-        if (is_admin()) {
-            add_action('admin_notices', [$this, 'adminNotices']);
-
-            if (WP_DEBUG)
-                add_action('init', [$this, 'environmentInfo']);
-        } else {
-
-            if (HEADLESS)
-                add_action('init', [$this, 'suppressError']);
-        }
     }
 }
