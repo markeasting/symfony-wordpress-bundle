@@ -2,10 +2,6 @@
 
 namespace Metabolism\WordpressBundle\Plugin;
 
-
-/**
- * Class
- */
 class EditorPlugin
 {
 
