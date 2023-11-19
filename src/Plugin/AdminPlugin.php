@@ -2,7 +2,7 @@
 
 namespace Metabolism\WordpressBundle\Plugin;
 
-class EditorPlugin
+class AdminPlugin
 {
 
     public function __construct()
@@ -11,14 +11,7 @@ class EditorPlugin
 
         if (is_admin()) {
             add_action('admin_head', [$this, 'adminHead']);
-        }
 
-        add_action('wp_before_admin_bar_render', function () {
-            global $wp_admin_bar;
-            $wp_admin_bar->remove_menu('customize');
-        });
-
-        if (is_admin()) {
             add_action('admin_menu', [$this, 'cleanAdminMenu']);
             add_action('wp_dashboard_setup', [$this, 'disableDashboardWidgets']);
             add_action('admin_init', [$this, 'addThemeOptionsCap']);
