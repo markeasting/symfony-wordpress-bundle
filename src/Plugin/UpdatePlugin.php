@@ -16,6 +16,15 @@ class UpdatePlugin
             if (!current_user_can('update_core')) {
                 remove_action('admin_notices', 'update_nag', 3);
             }
+
+            global $pagenow;
+            if ($pagenow === 'plugins.php' && DISALLOW_FILE_MODS === true) {
+                ?>
+                <div class="notice notice-info">
+                    <p>Plugins in the Wildpress framework are managed via <a target="_blank" href="https://getcomposer.org">Composer</a>. Contact your developer to add plugins.</p>
+                </div>
+                <?php
+            }
         }, 1);
     }
 
