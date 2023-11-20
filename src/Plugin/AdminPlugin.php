@@ -7,9 +7,20 @@ class AdminPlugin
 
     public function __construct()
     {
-        add_filter('admin_footer_text', '__return_empty_string');
-
         if (is_admin()) {
+            
+            add_filter('admin_footer_text', '__return_empty_string');
+
+            /* Fix attachments reserving slugs */        
+            add_action('add_attachment', function ($postId) {
+                $attachment = get_post($postId);
+                $slug = $attachment->post_name;
+                wp_update_post([
+                    'ID' => $postId,
+                    'post_name' => $slug.'_'.uniqid(), // add a suffix
+                ]);
+            });
+
             add_action('admin_head', [$this, 'adminHead']);
 
             add_action('admin_menu', [$this, 'cleanAdminMenu']);
