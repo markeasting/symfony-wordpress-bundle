@@ -84,7 +84,7 @@ class MailPlugin
 	 * Configure PHPMailer
 	 * @param $phpmailer
 	 */
-	public function configureSmtp($phpmailer)
+	public function configureSmtp(\PHPMailer $phpmailer)
 	{
 		// $phpmailer->SMTPDebug = 1;
 		$phpmailer->isSMTP();
@@ -100,6 +100,8 @@ class MailPlugin
 			$phpmailer->Password = urldecode($this->_smtp_config['pass']);
 		}
 
-		$phpmailer->SMTPSecure = $this->_smtp_config['encryption'] ?? null;
+		if (isset($this->_smtp_config['encryption'])) {
+			$phpmailer->SMTPSecure = $this->_smtp_config['encryption'];
+		}
 	}
 }
