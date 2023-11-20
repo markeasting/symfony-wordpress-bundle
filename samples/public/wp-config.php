@@ -1,19 +1,7 @@
 <?php
 
 /**
- * WordPress' configuration file
- *
- * You may want to edit config/packages/wordpress.yaml to change :
- *   Authentication Keys
- *   Debug mode
- *   Post types
- *   Taxonomies
- *   Admin page removal
- *   Image size
- *   Theme support
- *   Menus
- *   Options page
- *   Page templates
+ * NOTE: THIS FILE WILL BE OVERWRITTEN BY WORDPRESS BUNDLE
  */
 
 if (!class_exists('App') && !defined('ABSPATH')) {
@@ -30,9 +18,6 @@ if (!class_exists('App'))
     require dirname(__DIR__) . '/vendor/autoload.php';
 
 if (!env('APP_ENV')) {
-    if (!class_exists(Dotenv::class))
-        throw new RuntimeException('<code>APP_ENV environment variable is not defined. You need to define environment variables for configuration or add "symfony/dotenv" as a Composer dependency to load variables from a .env file.</code>');
-
     (new Dotenv())->bootEnv(dirname(__DIR__) . '/.env');
 }
 
