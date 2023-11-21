@@ -90,6 +90,7 @@ class MailPlugin
 		$phpmailer->isSMTP();
 		$phpmailer->Host = $this->_smtp_config['host'];
 		$phpmailer->Port = $this->_smtp_config['port'] ?? 25;
+		$phpmailer->Timeout = 10;
 
 		$SMTPAuth = (!empty($this->_smtp_config['auth_mode']) && $this->_smtp_config['auth_mode'] == 'login');
 
