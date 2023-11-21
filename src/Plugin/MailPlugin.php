@@ -86,7 +86,10 @@ class MailPlugin
 	 */
 	public function configureSmtp($phpmailer)
 	{
-		// $phpmailer->SMTPDebug = 1;
+		if (isset($_ENV['PHPMAILER_DEBUG_LEVEL'])) {
+			$phpmailer->SMTPDebug = (int) $_ENV['PHPMAILER_DEBUG_LEVEL'];
+		}
+
 		$phpmailer->isSMTP();
 		$phpmailer->Host = $this->_smtp_config['host'];
 		$phpmailer->Port = $this->_smtp_config['port'] ?? 25;
