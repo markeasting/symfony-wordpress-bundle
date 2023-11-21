@@ -82,9 +82,9 @@ class MailPlugin
 
 	/**
 	 * Configure PHPMailer
-	 * @param $phpmailer
+	 * @param \PHPMailer $phpmailer
 	 */
-	public function configureSmtp(\PHPMailer $phpmailer)
+	public function configureSmtp($phpmailer)
 	{
 		// $phpmailer->SMTPDebug = 1;
 		$phpmailer->isSMTP();
