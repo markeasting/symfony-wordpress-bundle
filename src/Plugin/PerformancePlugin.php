@@ -15,15 +15,15 @@ class PerformancePlugin
         add_filter( 'postmeta_form_keys', '__return_false' );
 
         // Disable feeds.
-        add_action('do_feed', [$this, 'disable_feeds'], 1);
-        add_action('do_feed_rdf', [$this, 'disable_feeds'], 1);
-        add_action('do_feed_rss', [$this, 'disable_feeds'], 1);
-        add_action('do_feed_rss2', [$this, 'disable_feeds'], 1);
-        add_action('do_feed_atom', [$this, 'disable_feeds'], 1);
+        add_action('do_feed', [$this, 'disableFeeds'], 1);
+        add_action('do_feed_rdf', [$this, 'disableFeeds'], 1);
+        add_action('do_feed_rss', [$this, 'disableFeeds'], 1);
+        add_action('do_feed_rss2', [$this, 'disableFeeds'], 1);
+        add_action('do_feed_atom', [$this, 'disableFeeds'], 1);
 
         // Disable comments feeds.
-        add_action('do_feed_rss2_comments', [$this, 'disable_feeds'], 1);
-        add_action('do_feed_atom_comments', [$this, 'disable_feeds'], 1);
+        add_action('do_feed_rss2_comments', [$this, 'disableFeeds'], 1);
+        add_action('do_feed_atom_comments', [$this, 'disableFeeds'], 1);
 
         // Disable comments.
         add_filter('comments_open', '__return_false');
