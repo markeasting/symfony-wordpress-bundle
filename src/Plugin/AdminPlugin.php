@@ -117,6 +117,7 @@ class AdminPlugin
     public function cleanAdminMenu()
     {
         $remove_menu_page = [
+            'edit.php',
             'edit-comments.php',
             'jetpack'
         ];
