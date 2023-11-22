@@ -612,6 +612,8 @@ class Post extends Entity implements WordpressRegisterable, \JsonSerializable
 
     /**
      * Get filtered content
+     * 
+     * @see Post::getRawContent()
      *
      * @param bool $index
      * @return string
