@@ -10,6 +10,7 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use function Env\env;
 
 class WordpressBundle extends Bundle
@@ -18,14 +19,6 @@ class WordpressBundle extends Bundle
     private string $public_dir;
     private string $log_dir;
     private RouterInterface $router;
-    private WordpressLoader $wordpressLoader;
-
-    public static $instance = null;
-
-    public function __construct(
-    ) {
-        self::$instance = $this; // NICE HACK
-    }
 
     public function getPath(): string
     {
@@ -42,8 +35,6 @@ class WordpressBundle extends Bundle
         $this->log_dir = $kernel->getLogDir();
         $this->root_dir = $kernel->getProjectDir();
         $this->router = $this->container->get('router');
-
-        $this->wordpressLoader = $this->container->get('metabolism.loader.wordpress_loader');
 
         $this->public_dir = $this->root_dir . (is_dir($this->root_dir . '/public') ? '/public' : '/web');
 
@@ -151,12 +142,13 @@ class WordpressBundle extends Bundle
             new \Roots\Bedrock\Autoloader();
         }
 
+        /** @var \App\Kernel */
+        global $kernel;
+        $container = $kernel->getContainer();
+
         self::loadPlugins();
-        
-        if (self::$instance) {
-            self::$instance->loadTaggedServices(self::$instance->wordpressLoader);
-            self::$instance->loadActions();
-        }
+        self::loadWordpressRegisterables($container);
+        self::loadActions($container);
     }
 
     /**
@@ -187,11 +179,14 @@ class WordpressBundle extends Bundle
      * @see WordpressBundle::bootstrap()
      * @see \Metabolism\WordpressBundle\Loader\WordpressRegisterable
      * 
-     * @param WordpressLoader $wordpressLoader
+     * @param ContainerInterface $container
      * @return void
      */
-    private function loadTaggedServices(WordpressLoader $wordpressLoader)
+    private static function loadWordpressRegisterables(ContainerInterface $container)
     {
+        /** @var WordpressLoader */
+        $wordpressLoader = $container->get('metabolism.loader.wordpress_loader');
+
         add_action('init', [$wordpressLoader, 'register']);
     }
 
@@ -199,13 +194,14 @@ class WordpressBundle extends Bundle
      * Called from the main mu-plugin entrypoint
      * @see WordpressBundle::bootstrap()
      * 
+     * @param ContainerInterface $container
      * @return void
      */
-    private function loadActions()
+    private static function loadActions(ContainerInterface $container)
     {
         /* Note, loginAction doesn't work, because the kernel isn't loaded at this point */
         if (self::isLoginUrl()) {
-            $loginAction = $this->container->get('metabolism.action.login_action');
+            $loginAction = $container->get('metabolism.action.login_action');
             $loginAction->init();
 
             return;
@@ -214,21 +210,21 @@ class WordpressBundle extends Bundle
         if (is_admin()) {
 
             /* wp-admin only actions */
-            $adminAction = $this->container->get('metabolism.action.admin_action');
+            $adminAction = $container->get('metabolism.action.admin_action');
             // add_action('kernel_loaded', [$adminAction, 'loaded']);
             add_action('admin_init', [$adminAction, 'init'], 99);
 
         } else {
 
             /* Frontend only actions */
-            $frontAction = $this->container->get('metabolism.action.front_action');
+            $frontAction = $container->get('metabolism.action.front_action');
             add_action('kernel_loaded', [$frontAction, 'loaded']);
             add_action('init', [$frontAction, 'init']);
             add_action('init', '_wp_admin_bar_init', 0);
         }
 
         /* General only actions */
-        $wordpressAction = $this->container->get('metabolism.action.wordpress_action');
+        $wordpressAction = $container->get('metabolism.action.wordpress_action');
         add_action('kernel_loaded', [$wordpressAction, 'loaded'], 99);
         add_action('init', [$wordpressAction, 'init'], 99);
 

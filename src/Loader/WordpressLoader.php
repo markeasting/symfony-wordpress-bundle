@@ -4,6 +4,13 @@ namespace Metabolism\WordpressBundle\Loader;
 
 use Metabolism\WordpressBundle\Loader\WordpressRegisterable;
 
+/**
+ * Auto-loads services that implement WordpressRegisterable (i.e. tagged `wordpress.registerable`).
+ * 
+ * Will be invoked during the 'init' hook.
+ * 
+ * @see \Metabolism\WordpressBundle\Loader\WordpressRegisterable
+ */
 class WordpressLoader
 {
     
