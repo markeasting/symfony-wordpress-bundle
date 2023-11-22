@@ -2,7 +2,7 @@
 
 namespace Metabolism\WordpressBundle\Loader;
 
-use Metabolism\WordpressBundle\Loader\WordpressRegisterable;;
+use Metabolism\WordpressBundle\Loader\WordpressRegisterable;
 
 class WordpressLoader
 {
