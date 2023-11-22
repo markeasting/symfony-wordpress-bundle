@@ -13,13 +13,13 @@ use Metabolism\WordpressBundle\Service\PaginationService;
 class PostCollection implements \IteratorAggregate, \Countable, \ArrayAccess
 {
 
-	private $query = false;
+	private \WP_Query $query;
 
-	private $args = [];
+	private array $args = [];
 
-	protected $items = [];
+	protected array $items = [];
 
-	protected $pagination;
+	protected array $pagination;
 
 	/**
 	 * @param array|\WP_Query|null $args
@@ -114,7 +114,7 @@ class PostCollection implements \IteratorAggregate, \Countable, \ArrayAccess
 	 * @param $args
 	 * @return array
 	 */
-	public function getPagination($args = [])
+	public function getPagination(array $args = [])
 	{
 
 		if (!empty($args)) {
