@@ -192,6 +192,9 @@ class WordpressBundle extends Bundle
 
     /**
      * Called from the main mu-plugin entrypoint
+     * 
+     * @TODO handle using service tagging
+     * 
      * @see WordpressBundle::bootstrap()
      * 
      * @param ContainerInterface $container
