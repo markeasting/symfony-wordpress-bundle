@@ -35,9 +35,9 @@ class Post extends Entity implements WordpressRegisterable, \JsonSerializable
 
     // use SerializableTrait;
 
-    private static int $jsonSerializeDepth = 0;
-    private static int $jsonSerializeDepthMax = 2;
-    private static array $jsonSerializeKeys = [];
+    protected static int $jsonSerializeDepth = 0;
+    public static int $jsonSerializeDepthMax = 1;
+    // private static array $jsonSerializeKeys = [];
 
     /**
      * All fields registered for all custom post types. Stored as:
@@ -49,11 +49,11 @@ class Post extends Entity implements WordpressRegisterable, \JsonSerializable
      */
     public static array $fields = [];
 
-    public static function setSerializeConfig(array $keys, int $maxDepth)
-    {
-        self::$jsonSerializeKeys = $keys;
-        self::$jsonSerializeDepthMax = $maxDepth;
-    }
+    // public static function setSerializeConfig(array $keys, int $maxDepth)
+    // {
+    //     // self::$jsonSerializeKeys = $keys;
+    //     self::$jsonSerializeDepthMax = $maxDepth;
+    // }
 
     public function jsonSerialize(): mixed
     {
@@ -84,12 +84,12 @@ class Post extends Entity implements WordpressRegisterable, \JsonSerializable
             : [];
 
         if ($acf) {
-            $c = count(self::$jsonSerializeKeys);
+            // $c = count(self::$jsonSerializeKeys);
 
             foreach ($acf->getFields() as $key => $value) {
 
-                if ($c > 0 && !in_array($key, self::$jsonSerializeKeys))
-                    continue;
+                // if ($c > 0 && !in_array($key, self::$jsonSerializeKeys))
+                //     continue;
 
                 if ($fields_for_this_class && !in_array($key, $fields_for_this_class))
                     continue;
