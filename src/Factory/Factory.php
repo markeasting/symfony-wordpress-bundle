@@ -4,7 +4,8 @@ namespace Metabolism\WordpressBundle\Factory;
 
 use Metabolism\WordpressBundle\Entity\Entity;
 
-class Factory {
+class Factory
+{
 
 	/**
 	 * Generate classname from string
@@ -30,17 +31,18 @@ class Factory {
 	 * @param array $args
 	 * @return bool|mixed
 	 */
-	protected static function loadFromCache($id, $type='object', $args=[]){
+	protected static function loadFromCache($id, $type = 'object', $args = [])
+	{
 
-		if( $id == null || is_array($id) )
+		if ($id == null || is_array($id))
 			return false;
 
-        $key = $id;
+		$key = $id;
 
-        if( !empty($args) )
-            $key .= crc32(json_encode($args));
+		if (!empty($args))
+			$key .= crc32(json_encode($args));
 
-		return wp_cache_get( $key, $type.'_factory' );
+		return wp_cache_get($key, $type . '_factory');
 	}
 
 
@@ -52,17 +54,18 @@ class Factory {
 	 * @param array $args
 	 * @return bool
 	 */
-	protected static function saveToCache($id, $object, $type, $args=[]){
+	protected static function saveToCache($id, $object, $type, $args = [])
+	{
 
-		if( $id == null || is_array($id) )
+		if ($id == null || is_array($id))
 			return false;
 
-        $key = $id;
+		$key = $id;
 
-        if( !empty($args) )
-            $key .= crc32(json_encode($args));
+		if (!empty($args))
+			$key .= crc32(json_encode($args));
 
-		return wp_cache_set( $key, $object, $type.'_factory' );
+		return wp_cache_set($key, $object, $type . '_factory');
 	}
 
 
@@ -73,37 +76,37 @@ class Factory {
 	 * @param bool $default_class
 	 * @return Entity|mixed
 	 */
-	public static function create($id, $class, $default_class=false){
+	public static function create($id, $class, $default_class = false)
+	{
 
-		if(empty($id))
+		if (empty($id))
 			return false;
 
 		$item = self::loadFromCache($id, $class);
 
-		if( $item )
-            return $item;
+		if ($item)
+			return $item;
 
 		$classname = self::getClassname($class);
 
-		$app_classname = 'App\Entity\\'.$classname;
-        $bundle_classname = $default_classname = 'Metabolism\WordpressBundle\Entity\\'.$classname;
+		$app_classname = 'App\Entity\\' . $classname;
+		$bundle_classname = $default_classname = 'Metabolism\WordpressBundle\Entity\\' . $classname;
 
-        if( $default_class )
-            $default_classname = 'Metabolism\WordpressBundle\Entity\\'.self::getClassname($default_class);
+		if ($default_class)
+			$default_classname = 'Metabolism\WordpressBundle\Entity\\' . self::getClassname($default_class);
 
-		if( class_exists($app_classname) && is_subclass_of($app_classname, $default_classname)  ){
+		if (class_exists($app_classname) && is_subclass_of($app_classname, $default_classname)) {
 
-            $item = new $app_classname($id);
-		}
-		else{
+			$item = new $app_classname($id);
+		} else {
 
-            if( class_exists($bundle_classname) )
+			if (class_exists($bundle_classname))
 				$item = new $bundle_classname($id);
-			elseif( $default_class )
+			elseif ($default_class)
 				$item = self::create($id, $default_class);
 		}
 
-		if( is_wp_error($item) || !$item || !$item->exist() )
+		if (is_wp_error($item) || !$item || !$item->exist())
 			$item = false;
 
 		self::saveToCache($id, $item, $class);
