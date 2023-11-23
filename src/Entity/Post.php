@@ -22,6 +22,11 @@ class Post extends Entity implements WordpressRegisterable, \JsonSerializable
 
     static string $post_type = 'post';
 
+    /**
+     * Will be removed from $post_type when casting this post type to an entity class
+     */
+    static string $post_type_prefix = '';
+
     public function register(): void
     {
         // Override in custom post types

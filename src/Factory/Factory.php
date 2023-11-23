@@ -3,6 +3,7 @@
 namespace Metabolism\WordpressBundle\Factory;
 
 use Metabolism\WordpressBundle\Entity\Entity;
+use Metabolism\WordpressBundle\Entity\Post;
 
 class Factory
 {
@@ -81,6 +82,10 @@ class Factory
 
 		if (empty($id))
 			return false;
+
+		if (Post::$post_type_prefix && str_contains($class, Post::$post_type_prefix)) {
+			$class = str_replace(Post::$post_type_prefix, '', $class);
+		}
 
 		$item = self::loadFromCache($id, $class);
 
