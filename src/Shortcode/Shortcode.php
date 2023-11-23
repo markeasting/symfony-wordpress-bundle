@@ -8,6 +8,8 @@ use Twig\Environment as Twig;
 /**
  * Base Shortcode class.
  * 
+ * @TODO output() should get it's arguments from the service container, like a controller
+ * 
  * https://codex.wordpress.org/Shortcode_API
  */
 abstract class Shortcode implements WordpressRegisterable
