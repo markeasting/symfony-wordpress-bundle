@@ -13,7 +13,7 @@ use Symfony\Component\ErrorHandler\Debug;
 /**
  * NOTE: THIS FILE WILL BE OVERWRITTEN BY WORDPRESS BUNDLE
  */
-if (is_admin()) {
+if (is_admin() || is_login()) {
     if ($_SERVER['APP_DEBUG']) {
         Debug::enable();
     }
