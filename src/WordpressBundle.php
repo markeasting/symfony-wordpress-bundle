@@ -142,13 +142,16 @@ class WordpressBundle extends Bundle
             new \Roots\Bedrock\Autoloader();
         }
 
+        self::loadPlugins();
+
         /** @var \App\Kernel */
         global $kernel;
-        $container = $kernel->getContainer();
 
-        self::loadPlugins();
-        self::loadWordpressRegisterables($container);
-        self::loadActions($container);
+        if ($kernel) {
+            $container = $kernel->getContainer();
+            self::loadWordpressRegisterables($container);
+            self::loadActions($container);
+        }
     }
 
     /**
