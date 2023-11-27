@@ -76,9 +76,17 @@ class UpdatePlugin
     //     add_filter('plugins_auto_update_enabled', '__return_false');
     // }
 
+    public function isLoginUrl()
+    {
+        $uri = explode('/', $_SERVER['SCRIPT_NAME']);
+        $page = end($uri);
+
+        return in_array($page, ['wp-login.php', 'wp-signup.php']);
+    }
+
     public function disableIncompatiblePlugins()
     {
-        if (!is_admin() && !WordpressBundle::isLoginUrl()) {
+        if (!is_admin() && !$this->isLoginUrl()) {
             if (is_multisite())
                 add_filter('site_option_active_sitewide_plugins', [$this, 'disableWP2FA']);
 

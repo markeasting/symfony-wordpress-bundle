@@ -109,14 +109,6 @@ class WordpressBundle extends Bundle
             $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
     }
 
-    public static function isLoginUrl()
-    {
-        $uri = explode('/', $_SERVER['SCRIPT_NAME']);
-        $page = end($uri);
-
-        return in_array($page, ['wp-login.php', 'wp-signup.php']);
-    }
-
     /**
      * Called from the main mu-plugin entrypoint
      * The reason for this is that the WP core has to be loaded before we can use 
@@ -205,8 +197,7 @@ class WordpressBundle extends Bundle
      */
     private static function loadActions(ContainerInterface $container)
     {
-        /* Note, loginAction doesn't work, because the kernel isn't loaded at this point */
-        if (self::isLoginUrl()) {
+        if (is_login()) {
             $loginAction = $container->get('metabolism.action.login_action');
             $loginAction->init();
 

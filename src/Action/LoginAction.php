@@ -3,8 +3,7 @@
 namespace Metabolism\WordpressBundle\Action;
 
 /**
- * @TODO fix this action, doesn't work since the kernel / container isn't loaded 
- * on the login screen.
+ * Loaded only on the Wordpress login page
  */
 class LoginAction 
 {
