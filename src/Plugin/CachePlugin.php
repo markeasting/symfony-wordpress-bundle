@@ -264,23 +264,30 @@ class CachePlugin
 	 */
 	public function __construct()
 	{
-		$env = $_SERVER['APP_ENV'] ?? 'dev';
-		$this->debug = (bool) ($_SERVER['APP_DEBUG'] ?? ('prod' !== $env));
-		$this->home_url = home_url();
+		add_action('init', function() {
+			
+			if (!is_user_logged_in()) {
+				return;
+			}
 
-		if( !$this->debug ) {
+			$env = $_SERVER['APP_ENV'] ?? 'dev';
+			$this->debug = (bool) ($_SERVER['APP_DEBUG'] ?? ('prod' !== $env));
+			$this->home_url = home_url();
 
-			if( isset($_GET['cache']) && $_GET['cache'] == 'purge' )
-				$this->purge();
+			if( !$this->debug ) {
 
-			if( isset($_GET['cache']) && $_GET['cache'] == 'clear' )
-				$this->clear();
+				if( isset($_GET['cache']) && $_GET['cache'] == 'purge' )
+					$this->purge();
 
-			add_action( 'init', [$this, 'addClearCacheButton']);
-			add_action( 'save_post', [$this, 'purgePostCache'], 10, 3);
-			add_action( 'saved_term', [$this, 'purgeTermCache'], 10, 4);
-		}
+				if( isset($_GET['cache']) && $_GET['cache'] == 'clear' )
+					$this->clear();
 
-		add_action( 'reset_cache', [$this, 'reset']);
+				add_action( 'init', [$this, 'addClearCacheButton']);
+				add_action( 'save_post', [$this, 'purgePostCache'], 10, 3);
+				add_action( 'saved_term', [$this, 'purgeTermCache'], 10, 4);
+			}
+
+			add_action( 'reset_cache', [$this, 'reset']);
+		});
 	}
 }
