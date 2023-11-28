@@ -124,7 +124,7 @@ class AdminPlugin
 
         $remove_submenu_page = [
             'themes.php' => [
-                'nav-menus.php',
+                // 'nav-menus.php',
                 'widgets.php'
             ]
         ];
