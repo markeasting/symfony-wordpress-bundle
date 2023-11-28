@@ -27,7 +27,7 @@ trait SingletonTrait {
      *
      * @return self
      */
-    public static function getInstance()
+    public static function getInstance(): static
     {
 
         $numargs = func_num_args();
