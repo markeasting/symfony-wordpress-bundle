@@ -116,35 +116,20 @@ class AdminPlugin
      */
     public function cleanAdminMenu()
     {
-        $remove_menu_page = [
-            'edit.php',
-            'edit-comments.php',
-            'jetpack'
-        ];
+        remove_menu_page('edit.php');
+        remove_menu_page('edit-comments.php');
 
-        $remove_submenu_page = [
-            'themes.php' => [
-                // 'nav-menus.php',
-                'widgets.php'
-            ]
-        ];
-        
-        foreach ((array) $remove_menu_page as $menu) {
-            remove_menu_page($menu);
-        }
+        remove_submenu_page('themes.php', 'widgets.php');
 
-        foreach ((array) $remove_submenu_page as $menu => $submenu) {
-            remove_submenu_page($menu, $submenu);
-        }
-
+        global $submenu;
         if (isset($submenu['themes.php'])) {
             foreach ($submenu['themes.php'] as $index => $menu_item) {
-                if (in_array('customize', $menu_item))
-                    unset($submenu['themes.php'][$index]);
+                foreach ($menu_item as $value) {
+                    if (strpos($value, 'customize') !== false) {
+                        unset($submenu['themes.php'][$index]);
+                    }
+                }
             }
-
-            if (empty($submenu['themes.php']))
-                remove_menu_page('themes.php');
         }
     }
 
