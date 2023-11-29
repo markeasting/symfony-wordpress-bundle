@@ -13,10 +13,16 @@ class ElementorService
      *
      * @TODO check if caching would help here
      * 
+     * @param Post|null $post;
      * @return string
      */
-    public function render(): string
+    public function render(?Post $post = null): string
     {
+
+        if ($post) {
+            setup_postdata($post->getPostObject());
+        }
+
         ob_start();
 
         $template_loaded = false;
@@ -32,7 +38,11 @@ class ElementorService
         }
 
         if (!$template_loaded) {
-            the_content();
+            if ($post) {
+                echo \Elementor\Plugin::instance()->frontend->get_builder_content_for_display($post->ID);
+            } else {
+                the_content();
+            }
         }
 
         return ob_get_clean();
