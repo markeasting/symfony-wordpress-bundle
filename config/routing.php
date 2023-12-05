@@ -22,6 +22,30 @@ if (function_exists('pll_languages_list')) {
     $root = new Route('/', ['_controller' => '\App\Controller\BlogController::fallbackAction']);
     $collection->add('root', $root->setMethods(['GET']));
 
+} else if (class_exists('TRP_Translate_Press') && function_exists('trp_get_languages')) {
+
+    throw new Exception('TranslatePress is currently not supported');
+
+    // flush_rewrite_rules();
+
+    // // $trp_obj = TRP_Translate_Press::get_trp_instance();
+    // // $settings_obj = $trp_obj->get_component('settings');
+
+    // // /** @var TRP_Languages */
+    // // $lang_obj = $trp_obj->get_component('languages');
+
+    // // $default_lang_labels = $settings_obj->get_setting('default-language');
+    // // $published_lang = $settings_obj->get_setting('publish-languages');
+    // // $published_lang_labels = $lang_obj->get_language_names($published_lang);
+
+    // foreach (trp_get_languages() as $iso_code => $locale) {
+    //     $code = strtok($iso_code, '_');
+    //     new Permastruct($collection, $code);
+    // }
+
+    // $root = new Route('/', ['_controller' => '\App\Controller\BlogController::fallbackAction']);
+    // $collection->add('root', $root->setMethods(['GET']));
+
 } else if (env('WP_MULTISITE') && !env('SUBDOMAIN_INSTALL')) {
     $current_site_id = get_current_blog_id();
 
