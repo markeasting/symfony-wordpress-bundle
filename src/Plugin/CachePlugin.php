@@ -166,7 +166,7 @@ class CachePlugin
 	private static function purgeVarnish($url = false)
 	{
 		if (!(isset($_SERVER['VARNISH_IPS']) || isset($_SERVER['VARNISH_IP']))) {
-			return;
+			return [];
 		}
 
 		if (!$url)
