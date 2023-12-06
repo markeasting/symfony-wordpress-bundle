@@ -15,7 +15,7 @@ use Symfony\Component\ErrorHandler\Debug;
  */
 if (is_admin() || is_login()) {
 
-    $debug = $_SERVER['APP_ENV'] == 'dev' && $_SERVER['ENABLE_ADMIN_EXCEPTION_HANDLER'] === 'true';
+    $debug = $_SERVER['APP_ENV'] == 'dev' && (isset($_SERVER['ENABLE_ADMIN_EXCEPTION_HANDLER']) && $_SERVER['ENABLE_ADMIN_EXCEPTION_HANDLER'] === 'true');
 
     if ($debug) {
         Debug::enable();
