@@ -54,15 +54,17 @@ class CachePlugin
 			$url = $_SERVER['REQUEST_URI'];
 			$query = parse_url($url, PHP_URL_QUERY);
 
-			$args = [
-				'id'    => 'cache-purge',
-				'title' => __('Purge Varnish cache'),
-				'href'  => $url . ($query ? '&' : '?') . 'cache=purge'
-			];
-
-			$wp_admin_bar->add_node($args);
-
 			if (current_user_can('administrator')) {
+
+				if ((isset($_SERVER['VARNISH_IPS']) || isset($_SERVER['VARNISH_IP']))) {
+					$args = [
+						'id'    => 'cache-purge',
+						'title' => __('Purge Varnish cache'),
+						'href'  => $url . ($query ? '&' : '?') . 'cache=purge'
+					];
+	
+					$wp_admin_bar->add_node($args);
+				}
 
 				$args = [
 					'id'    => 'cache-clear',
