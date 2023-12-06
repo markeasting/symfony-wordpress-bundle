@@ -12,40 +12,47 @@ class RewritePlugin
         // }
 
         // add_action('generate_rewrite_rules', [$this, 'remove']);
+
+        /* @TODO this doesn't seem to work */
+        // add_action('update_option_permalink_structure', function() {
+        //     // global $wp_rewrite;
+        //     // $wp_rewrite->flush_rules(false);
+        //     do_action('reset_cache');
+        // });
     }
 
-    public function remove($wp_rewrite)
-    {
-        $remove = [
-            'author',
-            'attachment',
-            'embed',
-            'trackback',
-            'comment',
-            'feed',
-        ];
+    // public function remove($wp_rewrite)
+    // {
+    //     $remove = [
+    //         'author',
+    //         'attachment',
+    //         'embed',
+    //         'trackback',
+    //         'comment',
+    //         'feed',
+    //     ];
 
-        foreach (['rules', 'extra_rules_top'] as $item) {
+    //     foreach (['rules', 'extra_rules_top'] as $item) {
 
-            foreach ($wp_rewrite->$item as $rule => $rewrite) {
+    //         foreach ($wp_rewrite->$item as $rule => $rewrite) {
 
-                if (in_array('attachment', $remove) && (strpos($rule, '/attachment/') !== false || strpos($rewrite, 'attachment=') !== false))
-                    unset($wp_rewrite->$item[$rule]);
+    //             if (in_array('attachment', $remove) && (strpos($rule, '/attachment/') !== false || strpos($rewrite, 'attachment=') !== false))
+    //                 unset($wp_rewrite->$item[$rule]);
 
-                if (in_array('embed', $remove) && strpos($rule, '/embed/') !== false)
-                    unset($wp_rewrite->$item[$rule]);
+    //             if (in_array('embed', $remove) && strpos($rule, '/embed/') !== false)
+    //                 unset($wp_rewrite->$item[$rule]);
 
-                if (in_array('feed', $remove) && (strpos($rule, '/(feed|rdf|rss|rss2|atom)/') !== false || strpos($rule, '/feed/') !== false))
-                    unset($wp_rewrite->$item[$rule]);
+    //             if (in_array('feed', $remove) && (strpos($rule, '/(feed|rdf|rss|rss2|atom)/') !== false || strpos($rule, '/feed/') !== false))
+    //                 unset($wp_rewrite->$item[$rule]);
 
-                if (in_array('trackback', $remove) && strpos($rule, '/trackback/') !== false)
-                    unset($wp_rewrite->$item[$rule]);
+    //             if (in_array('trackback', $remove) && strpos($rule, '/trackback/') !== false)
+    //                 unset($wp_rewrite->$item[$rule]);
 
-                if (in_array('comment', $remove) && strpos($rule, '/comment-page-') !== false)
-                    unset($wp_rewrite->$item[$rule]);
-            }
-        }
-    }
+    //             if (in_array('comment', $remove) && strpos($rule, '/comment-page-') !== false)
+    //                 unset($wp_rewrite->$item[$rule]);
+    //         }
+    //     }
+    // }
 
 
     // public function loadPermalinks()
