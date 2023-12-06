@@ -2,6 +2,8 @@
 
 namespace Metabolism\WordpressBundle\Plugin;
 
+use Metabolism\WordpressBundle\Entity\Blog;
+
 use function Env\env;
 
 class MailPlugin
@@ -13,7 +15,19 @@ class MailPlugin
 	{
 		$dsn = env('MAILER_DSN');
 
-		if (!empty($dsn)) {
+        if (!isset($dsn) || empty($dsn) || $dsn === 'null://localhost') {
+
+            add_action('admin_notices', function() {
+				printf('<div class="notice notice-warning is-dismissible"><p>Mail delivery disabled - no <code>MAILER_DSN</code> configured.</p></div>');
+			});
+
+		} else {
+
+			add_action('init', function() {
+				if (is_user_logged_in() && current_user_can('administrator')) {
+					$this->addToolsPage();
+				}
+			});
 
 			$this->setSMTPConfig($dsn);
 
@@ -29,6 +43,51 @@ class MailPlugin
 				add_filter('wp_mail_from_name', array($this, 'fromName'));
 			}
 		}
+	}
+
+	public function addToolsPage()
+	{
+		add_management_page('Email tester', 'Email tester', 'manage_options', 'test-mail-sender', function() {
+			$current_user = wp_get_current_user();
+			?>
+			<div class="wrap">
+				<h2>Email tester</h2>
+				<p>Configured <code>MAILER_DSN</code>:</p>
+				<p><code><?= esc_html(env('MAILER_DSN')); ?></code></p>
+				<form action="" method="post">
+					<?php wp_nonce_field('ws_send_test_mail'); ?>
+					<input type="text" name="test_mail_address" class="" placeholder="Email" value="<?= $current_user->user_email ?>">
+					<input type="submit" name="ws_send_test_mail" class="button-primary" value="Send test mail">
+				</form>
+			</div>
+			<?php
+		});
+
+		/* Handle POST request */
+		add_action('admin_init', function () {
+			if (isset($_POST['ws_send_test_mail']) && $_POST['test_mail_address'] && check_admin_referer('ws_send_test_mail')) {
+
+				$_ENV['PHPMAILER_DEBUG_LEVEL'] = 2;
+
+				$to = $_POST['test_mail_address'];
+				$subject = 'WordPress Test Mail';
+				$message = 'This is a test mail sent from WordPress';
+
+				ob_start();
+
+				$success = wp_mail($to, $subject, $message);
+
+				$output = ob_get_clean();
+
+				add_action('admin_notices', function() use ($success, $output) {
+					?>
+					<div class="notice notice-<?= $success ? 'success' : 'error' ?> is-dismissible">
+						<p><?= $output; ?></p>
+					</div>
+					<?php
+				});
+			}
+		});
 	}
 
 	/**
@@ -70,14 +129,17 @@ class MailPlugin
 	 */
 	public function fromEmail($email)
 	{
-		if (str_contains($email, 'localhost')) {
-			$email = 'wordpress@testdomain.com';
-		} else {
-			if (!empty($this->_smtp_config['user']) && is_email($this->_smtp_config['user']))
-				return $this->_smtp_config['user'];
+		$domain = Blog::getInstance()->getDomain();
+
+		if (str_contains($domain, 'localhost')) {
+			$domain = 'localhost.com';
 		}
 
-		return $email;
+		/* Using SMTP credentials is possible, but not adviced (e.g. sendgrid user is 'apikey') */
+		// if (!empty($this->_smtp_config['user']) && is_email($this->_smtp_config['user']))
+		// 	return $this->_smtp_config['user'];
+
+		return "noreply@$domain";
 	}
 
 	/**

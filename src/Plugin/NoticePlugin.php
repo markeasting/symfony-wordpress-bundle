@@ -54,9 +54,10 @@ class NoticePlugin
                 $errors[] = $folder . ' folder is not writable';
         }
 
-        $mailer_dsn = env('MAILER_DSN');
-        if (!isset($mailer_dsn) || $mailer_dsn === 'null://localhost')
-            $errors[] = 'Mail delivery disabled: no <code>MAILER_DSN</code> configured.';
+        // Moved to MailPlugin
+        // $mailer_dsn = env('MAILER_DSN');
+        // if (!isset($mailer_dsn) || $mailer_dsn === 'null://localhost')
+        //     $errors[] = 'Mail delivery disabled: no <code>MAILER_DSN</code> configured.';
 
         if (is_blog_installed() && !env('WP_INSTALLED'))
             $notices[] = 'Wordpress is now installed, please add <code>WP_INSTALLED=1</code> to your environment.';
