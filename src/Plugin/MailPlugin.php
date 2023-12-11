@@ -47,6 +47,10 @@ class MailPlugin
 
 	public function addToolsPage()
 	{
+		if (!function_exists('add_management_page')) {
+			return;
+		}
+
 		add_management_page('Email tester', 'Email tester', 'manage_options', 'test-mail-sender', function() {
 			$current_user = wp_get_current_user();
 			?>
